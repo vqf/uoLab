@@ -41,7 +41,6 @@ function loadTag(dsc) {
       });
     } else {
       let sid = uid();
-      if (dsc.)
     }
   }
 }
