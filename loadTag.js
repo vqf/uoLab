@@ -1,0 +1,50 @@
+console.log("lt loaded");
+
+function loadTag(dsc) {
+  let result = null;
+  if (typeof dsc === "object") {
+    if (dsc.hasOwnProperty("tag")) {
+      let tag = dsc.tag;
+      let sid = _uid();
+      if (dsc.hasOwnProperty("id")) {
+        sid = dsc.id;
+      }
+      result = document.getElementById(sid);
+      if (result === null) {
+        result = document.createElement(tag);
+        Object.keys(dsc).forEach(k => {
+          if (k !== "content" && k !== "tag") {
+            result[k] = dsc[k];
+          } else if (k === "content") {
+            if (Array.isArray(dsc.content) === true) {
+              dsc.content.forEach(el => {
+                result.appendChild(loadTag(el));
+              });
+            } else {
+              result.appendChild(loadTag(dsc.content));
+            }
+          }
+        });
+      }
+    }
+  } else {
+    // Not an object
+    result = document.createTextNode(dsc);
+  }
+  return result;
+}
+
+let t = loadTag({
+  tag: "div",
+  id: "yo1",
+  className: "alot",
+  content: [
+    "atext",
+    {
+      tag: "span",
+      id: "myspan",
+      content: "andaspan"
+    }
+  ]
+});
+document.body.appendChild(t);

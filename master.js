@@ -33,18 +33,6 @@ function _uid() {
   return result;
 }
 
-function loadTag(dsc) {
-  if (typeof dsc === "object") {
-    if (dsc.isArray() === true) {
-      dsc.forEach(el => {
-        loadTag(el);
-      });
-    } else {
-      let sid = uid();
-    }
-  }
-}
-
 function loadDependencies(scs) {
   scs.forEach(sc => {
     let sid = "ld" + sc.replace(/\./g, "_");
@@ -59,4 +47,4 @@ function loadDependencies(scs) {
   });
 }
 
-loadTag({ name: "yo" });
+loadDependencies(["pipette.js", "loadTag.js"]);
