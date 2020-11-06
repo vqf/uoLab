@@ -1,0 +1,17 @@
+.pipette_top,
+.pipette_body {
+  fill: #004d00;
+}
+.pipette_rod,
+.pipette_unloader {
+  fill: #001c00;
+}
+
+.pipette_piston,
+.pipette_tipholder {
+  fill: #555555;
+}
+
+.pipette {
+  transform: "scale(2)";
+}

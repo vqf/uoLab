@@ -52,10 +52,10 @@ function loadSVGTag(dsc) {
           } else if (k === "content") {
             if (Array.isArray(dsc.content) === true) {
               dsc.content.forEach(el => {
-                result.appendChild(loadTag(el));
+                result.appendChild(loadSVGTag(el));
               });
             } else {
-              result.appendChild(loadTag(dsc.content));
+              result.appendChild(loadSVGTag(dsc.content));
             }
           }
         });
@@ -68,13 +68,6 @@ function loadSVGTag(dsc) {
   return result;
 }
 
-let t = loadSVGTag({
-  tag: "circle",
-  id: "c1",
-  className: "cl",
-  cx: 100,
-  cy: 100,
-  r: 20
-});
+let t = loadSVGTag(pipette);
 
 document.getElementById("screen").appendChild(t);

@@ -47,4 +47,19 @@ function loadDependencies(scs) {
   });
 }
 
+function loadStyles(scs) {
+  scs.forEach(sc => {
+    let sid = "ld" + sc.replace(/\./g, "_");
+    let s = document.getElementById(sid);
+    if (s === null) {
+      s = document.createElement("link");
+      (s.rel = "stylesheet"), (s.type = "text/css");
+      s.id = sid;
+      s.href = sc;
+      document.head.appendChild(s);
+    }
+  });
+}
+
 loadDependencies(["pipette.js", "loadTag.js"]);
+loadStyles(["pipette.css"]);
