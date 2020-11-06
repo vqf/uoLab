@@ -34,17 +34,47 @@ function loadTag(dsc) {
   return result;
 }
 
-let t = loadTag({
-  tag: "div",
-  id: "yo1",
-  className: "alot",
-  content: [
-    "atext",
-    {
-      tag: "span",
-      id: "myspan",
-      content: "andaspan"
+function loadSVGTag(dsc) {
+  let result = null;
+  if (typeof dsc === "object") {
+    if (dsc.hasOwnProperty("tag")) {
+      let tag = dsc.tag;
+      let sid = _uid();
+      if (dsc.hasOwnProperty("id")) {
+        sid = dsc.id;
+      }
+      result = document.getElementById(sid);
+      if (result === null) {
+        result = document.createElementNS("http://www.w3.org/2000/svg", tag);
+        Object.keys(dsc).forEach(k => {
+          if (k !== "content" && k !== "tag") {
+            result.setAttribute(k, dsc[k]);
+          } else if (k === "content") {
+            if (Array.isArray(dsc.content) === true) {
+              dsc.content.forEach(el => {
+                result.appendChild(loadTag(el));
+              });
+            } else {
+              result.appendChild(loadTag(dsc.content));
+            }
+          }
+        });
+      }
     }
-  ]
+  } else {
+    // Not an object
+    result = document.createTextNode(dsc);
+  }
+  return result;
+}
+
+let t = loadSVGTag({
+  tag: "circle",
+  id: "c1",
+  className: "cl",
+  cx: 100,
+  cy: 100,
+  r: 20
 });
-document.body.appendChild(t);
+
+document.getElementById("screen").appendChild(t);
