@@ -61,5 +61,5 @@ function loadStyles(scs) {
   });
 }
 
-loadDependencies(["pipette.js", "loadTag.js"]);
+loadDependencies(["loadTag.js", "pipette.js", "experiment.js"]);
 loadStyles(["pipette.css"]);

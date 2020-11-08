@@ -68,6 +68,3 @@ function loadSVGTag(dsc) {
   return result;
 }
 
-let t = loadSVGTag(pipette);
-
-document.getElementById("screen").appendChild(t);
