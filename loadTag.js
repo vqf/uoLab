@@ -1,4 +1,3 @@
-
 function loadTag(dsc) {
   let result = null;
   if (typeof dsc === "object") {
@@ -67,4 +66,4 @@ function loadSVGTag(dsc) {
   return result;
 }
 
-console.log("loadTag loaded");
+if (DEBUG > 0) console.log("loadTag loaded");
