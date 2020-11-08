@@ -1,3 +1,4 @@
+
 function _uid() {
   let l = 10;
   let result = "";
@@ -63,3 +64,5 @@ function loadStyles(scs) {
 
 loadDependencies(["loadTag.js", "pipette.js", "experiment.js"]);
 loadStyles(["pipette.css"]);
+
+console.log("Master loaded");

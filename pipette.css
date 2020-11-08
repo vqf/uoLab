@@ -2,9 +2,13 @@
 .pipette_body {
   fill: #004d00;
 }
-.pipette_rod,
 .pipette_unloader {
   fill: #001c00;
+  transition: transform 0.2s;
+}
+
+.pipette_unloader:active {
+  transform: translate(0, 1.1px);
 }
 
 .pipette_piston,
@@ -12,6 +16,13 @@
   fill: #555555;
 }
 
-.pipette {
-  transform: "scale(2)";
+.pipette_plunger {
+  transition: transform 0.7s ease;
+}
+.pipette_plunger:active {
+  transform: translate(0, 4px);
+}
+
+.yellow_tip {
+  fill: #88880055;
 }

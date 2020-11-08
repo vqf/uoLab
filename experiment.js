@@ -1,3 +1,3 @@
-let t = loadSVGTag(pipette);
+let t1 = loadSVGTag(pipette);
 
-document.getElementById("screen").appendChild(t);
+document.getElementById("screen").appendChild(t1);

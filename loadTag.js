@@ -1,4 +1,3 @@
-console.log("lt loaded");
 
 function loadTag(dsc) {
   let result = null;
@@ -68,3 +67,4 @@ function loadSVGTag(dsc) {
   return result;
 }
 
+console.log("loadTag loaded");
