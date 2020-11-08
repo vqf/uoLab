@@ -33,4 +33,32 @@ function _uid() {
   return result;
 }
 
+function _def() {
+  var result = "";
+  for (var i = 0; i < arguments.length; i++) {
+    var r = arguments[i];
+    if (typeof r !== "undefined" && r !== "") {
+      return r;
+    }
+  }
+  return result;
+}
+
+class plugger {
+  constructor(parent, code, jscode, style) {
+    this.parent = _def(parent, document);
+    this.code = _def(code);
+    this.jscode = _def(jscode);
+    this.style = _def(style);
+    this.uid = _uid();
+  }
+  _shadow() {
+    this.code = this.code.replace(
+      /(id=[\"\'])([^\"\']+)([\"\'])/,
+      "$1" + "$2" + this.uid + "$3"
+    );
+    console.log(this.code);
+  }
+}
+
 if (DEBUG > 0) console.log("Plugger loaded");
