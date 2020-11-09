@@ -54,10 +54,20 @@ class plugger {
   }
   _shadow() {
     this.code = this.code.replace(
-      /(id=[\"\'])([^\"\']+)([\"\'])/,
+      /(id=[\"\'])([^\"\']+)([\"\'])/g,
       "$1" + "$2" + this.uid + "$3"
     );
-    console.log(this.code);
+    let jsvars = [];
+    let r;
+    while (
+      (r = /[;\{\(][\s\r\n]*(?:let|var|cons)\s+([\S]+)\s*=/gs.exec(
+        this.jscode
+      )) !== null
+    ) {
+      debugger;
+      jsvars.push(r[1]);
+    }
+    console.log(jsvars);
   }
 }
 
