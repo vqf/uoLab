@@ -64,7 +64,6 @@ class plugger {
         this.jscode
       )) !== null
     ) {
-      debugger;
       jsvars.push(r[1]);
     }
     console.log(jsvars);
