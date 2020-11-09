@@ -57,15 +57,17 @@ class plugger {
       /(id=[\"\'])([^\"\']+)([\"\'])/g,
       "$1" + "$2" + this.uid + "$3"
     );
+    const strng = this.jscode;
+    const re = /(?:let|var|const)\s+([^\s]+)\s*[=;$]/gi;
     let jsvars = [];
-    let r;
-    while (
-      (r = /[;\{\(][\s\r\n]*(?:let|var|cons)\s+([\S]+)\s*=/gs.exec(
-        this.jscode
-      )) !== null
-    ) {
-      jsvars.push(r[1]);
-    }
+    let m;
+    do {
+      m = re.exec(strng);
+      if (m) {
+        m.shift();
+        jsvars.push(m);
+      }
+    } while (m);
     console.log(jsvars);
   }
 }

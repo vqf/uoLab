@@ -16,6 +16,6 @@ let tmp = new plugger(
   return result;
 }`
 );
-//tmp._shadow();
+tmp._shadow();
 
 if (DEBUG > 0) console.log("Experiment loaded");
