@@ -44,6 +44,16 @@ function _def() {
   return result;
 }
 
+function toggleClass(obj, classname) {
+  let y = obj.classList.item(classname);
+  debugger;
+  if (obj.classList.item(classname) === undefined) {
+    obj.classList.add(classname);
+  } else {
+    obj.classList.remove(classname);
+  }
+}
+
 class plugger {
   constructor(parent, obj, jscode, style) {
     this.parent = _def(parent, document);
@@ -54,32 +64,31 @@ class plugger {
   }
 
   inject() {
+    this._shadow();
     this.parent.appendChild(this.obj);
     this._scripts(this.jscode);
   }
   _scripts(sc) {
-    let sid = "ld" + this.uid;
+    let sid = "script" + this.uid;
     let s = document.getElementById(sid);
     if (s === null) {
       s = document.createElement("script");
       s.type = "text/javascript";
       s.id = sid;
-      s.src = sc;
+      s.innerHTML = sc;
       document.body.appendChild(s);
     }
   }
-  _styles(scs) {
-    scs.forEach(sc => {
-      let sid = "ld" + sc.replace(/\./g, "_");
-      let s = document.getElementById(sid);
-      if (s === null) {
-        s = document.createElement("link");
-        (s.rel = "stylesheet"), (s.type = "text/css");
-        s.id = sid;
-        s.href = sc;
-        document.head.appendChild(s);
-      }
-    });
+  _styles(sc) {
+    let sid = "style" + sc.replace(/\./g, "_");
+    let s = document.getElementById(sid);
+    if (s === null) {
+      s = document.createElement("link");
+      (s.rel = "stylesheet"), (s.type = "text/css");
+      s.id = sid;
+      s.innerHTML = sc;
+      document.head.appendChild(s);
+    }
   }
   _shadow() {
     this.obj.innerHTML = this.obj.innerHTML.replace(
@@ -96,7 +105,7 @@ class plugger {
   }
 
   _convertLocals() {
-    this.jscode.replace(/local\(([^\)]+)\)/, "$1" + this.uid);
+    this.jscode = this.jscode.replace(/local\(([^\)]+)\)/g, "$1" + this.uid);
   }
 
   _convertVars() {
@@ -108,7 +117,7 @@ class plugger {
 
   _convertFuncts() {
     const re1 = /function\s+([^\s]+)\s*\(/gi;
-    const bef = "([;\\s^])(";
+    const bef = "([^\\w\\d\\_])(";
     const aft = ")(\\s*\\()";
     this._convert(re1, bef, aft);
   }

@@ -1,21 +1,8 @@
 let t = loadSVGTag(pipette);
 
-document.getElementById("screen").appendChild(t);
+//document.getElementById("screen").appendChild(t);
 
-let tmp = new plugger(
-  document.getElementById("screen"),
-  t,
-  `function _def() {
-  var result = ""; let d = 9;
-  for (var i = 0; i < arguments.length; i++) {
-    var r = arguments[i];
-    if (typeof r !== "undefined" && r !== "") {
-      return r;
-    }
-  }
-  return result;
-}`
-);
-tmp._shadow();
+let tmp = new plugger(document.getElementById("screen"), t, pipette_behavior);
+tmp.inject();
 
 if (DEBUG > 0) console.log("Experiment loaded");

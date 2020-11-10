@@ -1,7 +1,6 @@
 let pipette = {
   tag: "g",
   class: "pipette",
-  id: "pipette",
   transform: "scale(2)",
   content: [
     {
@@ -13,6 +12,7 @@ let pipette = {
     {
       tag: "g",
       class: "pipette_plunger",
+      id: "pipette_plunger",
       content: [
         {
           tag: "path",
@@ -64,12 +64,12 @@ let yellow_tip = {
 };
 
 let pipette_behavior = `
-let tp = document.getElementById('local(pipette_unloader)');
-tp.addEventListener('click', unload_pipette);
-
-function unload_pipette(){
-  alert('yo');
+function depress_plunger(e){
+  let tp = document.getElementById('local(pipette_plunger)');
+  toggleClass(tp, 'depressed_plunger');
 }
+let tp = document.getElementById('local(pipette_plunger)');
+tp.addEventListener('click', function(e){depress_plunger(e)});
 `;
 
 if (DEBUG > 0) console.log("Pipette loaded");
