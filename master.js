@@ -28,7 +28,12 @@ function loadStyles(scs) {
   });
 }
 
-loadDependencies(["plugger.js", "loadTag.js", "pipette.js", "experiment.js"]);
-loadStyles(["pipette.css"]);
+loadDependencies([
+  "plugger.js",
+  "loadTag.js",
+  "pipette/pipette.js",
+  "experiment.js"
+]);
+loadStyles(["pipette/pipette.css"]);
 
 if (DEBUG > 0) console.log("Master loaded");
