@@ -1,7 +1,8 @@
 let pipette = {
   tag: "g",
   class: "pipette",
-  transform: "scale(6)",
+  id: "pipette",
+  transform: "scale(2)",
   content: [
     {
       tag: "path",
@@ -30,6 +31,7 @@ let pipette = {
     {
       tag: "g",
       class: "pipette_unloader",
+      id: "pipette_unloader",
       content: [
         {
           tag: "path",
@@ -60,5 +62,14 @@ let yellow_tip = {
   d:
     "m 13.325755,89.800433 c 0.126663,-2.206485 0.253271,-3.185743 0.379918,-4.165296 -0.316623,0.02967 -0.632961,0.05931 -0.949756,0.05932 -0.316795,1.1e-5 -0.633361,-0.02965 -0.949984,-0.05932 0.12665,0.979553 0.253242,1.958659 0.379931,4.165614 0.126688,2.206956 0.253319,5.639813 0.379969,9.073196 0,0 0.37995,0 0.37995,0 0.12665,-3.433383 0.25331,-6.867029 0.379972,-9.073514 z"
 };
+
+let pipette_behavior = `
+let tp = document.getElementById('local(pipette_unloader)');
+tp.addEventListener('click', unload_pipette);
+
+function unload_pipette(){
+  alert('yo');
+}
+`;
 
 if (DEBUG > 0) console.log("Pipette loaded");

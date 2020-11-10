@@ -7,7 +7,7 @@
   transition: transform 0.2s;
 }
 
-.pipette_unloader:active {
+.active_pipette_unloader {
   transform: translate(0, 1.1px);
 }
 
