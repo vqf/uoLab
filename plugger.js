@@ -57,6 +57,10 @@ class plugger {
       /(id=[\"\'])([^\"\']+)([\"\'])/g,
       "$1" + "$2" + this.uid + "$3"
     );
+    this._convertVars();
+  }
+
+  _convertVars() {
     const strng = this.jscode;
     const re = /(?:let|var|const)\s+([^\s]+)\s*[=;$]/gi;
     let jsvars = [];
@@ -65,10 +69,16 @@ class plugger {
       m = re.exec(strng);
       if (m) {
         m.shift();
-        jsvars.push(m);
+        jsvars.push(m[0]);
       }
     } while (m);
-    console.log(jsvars);
+    for (let i in jsvars) {
+      let v = jsvars[i];
+      const repl = new RegExp("([;\\s^])(" + v + ")([^\\w\\_\\d\\-])", "g");
+      console.log(repl);
+      this.jscode = this.jscode.replace(repl, "$1$2" + this.uid + "$3");
+    }
+    console.log(this.jscode);
   }
 }
 
