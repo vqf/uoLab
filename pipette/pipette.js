@@ -1,4 +1,4 @@
-let pipette = {
+let pipette_code = {
   tag: "g",
   class: "pipette",
   transform: "scale(2)",
@@ -76,5 +76,15 @@ tp.addEventListener('click', function(e){depress_plunger(e)});
 let rp = document.getElementById('local(pipette_unloader)');
 rp.addEventListener('click', function(e){release_tip(e)});
 `;
+
+class pipette {
+  constructor(parent) {
+    let mp = loadSVGTag(pipette_code);
+    this.plugger = new plugger(parent, mp, pipette_behavior);
+  }
+  inject() {
+    this.plugger.inject();
+  }
+}
 
 if (DEBUG > 0) console.log("Pipette loaded");

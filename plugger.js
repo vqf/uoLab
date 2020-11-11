@@ -61,9 +61,11 @@ class plugger {
     this.uid = _uid();
   }
 
-  inject() {
+  inject(x, y) {
     this._shadow();
-    this.parent.appendChild(this.obj);
+    let o = this.parent.appendChild(this.obj);
+    debugger;
+    o.transform.baseVal.add("translate(" + x + ", " + y + ")");
     this._scripts(this.jscode);
   }
   _scripts(sc) {

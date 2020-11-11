@@ -1,8 +1,5 @@
-let t = loadSVGTag(pipette);
-
-//document.getElementById("screen").appendChild(t);
-
-let tmp = new plugger(document.getElementById("screen"), t, pipette_behavior);
-tmp.inject();
+let scr = document.getElementById("screen");
+let pipette1 = new pipette(scr);
+pipette1.inject();
 
 if (DEBUG > 0) console.log("Experiment loaded");
