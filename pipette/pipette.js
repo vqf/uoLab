@@ -68,8 +68,13 @@ function depress_plunger(e){
   let tp = document.getElementById('local(pipette_plunger)');
   toggleClass(tp, 'depressed_plunger');
 }
+function release_tip(e){
+  console.log('releasing');
+}
 let tp = document.getElementById('local(pipette_plunger)');
 tp.addEventListener('click', function(e){depress_plunger(e)});
+let rp = document.getElementById('local(pipette_unloader)');
+rp.addEventListener('click', function(e){release_tip(e)});
 `;
 
 if (DEBUG > 0) console.log("Pipette loaded");
