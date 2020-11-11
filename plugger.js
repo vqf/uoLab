@@ -45,12 +45,10 @@ function _def() {
 }
 
 function toggleClass(obj, classname) {
-  let y = obj.classList.item(classname);
-  debugger;
-  if (obj.classList.item(classname) === undefined) {
-    obj.classList.add(classname);
-  } else {
+  if (obj.classList.contains(classname)) {
     obj.classList.remove(classname);
+  } else {
+    obj.classList.add(classname);
   }
 }
 
