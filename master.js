@@ -1,7 +1,14 @@
 let DEBUG = 0;
 
+let logger = new Event("log");
+document.addEventListener("log", function(e) {
+  console.log(e);
+});
+
 function loadDependencies(scs) {
   scs.forEach(sc => {
+    logger.custom = sc;
+    document.dispatchEvent(logger);
     let sid = "ld" + sc.replace(/\./g, "_");
     let s = document.getElementById(sid);
     if (s === null) {
