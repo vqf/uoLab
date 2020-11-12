@@ -66,6 +66,18 @@ class plugger {
     this.pos.setTranslate(x, y);
   }
 
+  move(dx, dy) {
+    let an = {
+      tag: "animateTransform",
+      attributeName: "transform",
+      type: "translate",
+      by: "-50 -50",
+      dur: "2s"
+    };
+    let t = loadSVGTag(an);
+    this.injected.appendChild(t);
+  }
+
   inject(x, y) {
     this._shadow();
     this.injected = this.parent.appendChild(this.obj);
