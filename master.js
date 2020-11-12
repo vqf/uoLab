@@ -2,7 +2,7 @@ let DEBUG = 0;
 
 let logger = new Event("log");
 document.addEventListener("log", function(e) {
-  console.log(e);
+  console.log(e.custom);
 });
 
 function loadDependencies(scs) {
