@@ -82,6 +82,9 @@ class pipette {
     let mp = loadSVGTag(pipette_code);
     this.plugger = new plugger(parent, mp, pipette_behavior);
   }
+  setPos(x, y) {
+    this.plugger.setPos(x, y);
+  }
   inject(x, y) {
     this.plugger.inject(x, y);
   }

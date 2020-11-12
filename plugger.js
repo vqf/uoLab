@@ -58,16 +58,19 @@ class plugger {
     this.obj = _def(obj);
     this.jscode = _def(jscode);
     this.style = _def(style);
+    this.pos = this.parent.createSVGTransform();
     this.uid = _uid();
+  }
+
+  setPos(x, y) {
+    this.pos.setTranslate(x, y);
   }
 
   inject(x, y) {
     this._shadow();
-    let o = this.parent.appendChild(this.obj);
-    let transl = this.parent.createSVGTransform();
-    transl.setTranslate(x, y);
-    o.transform.baseVal.appendItem(transl);
-    //o.setAttribute("transform", "translate(" + x + ", " + y + ")");
+    this.injected = this.parent.appendChild(this.obj);
+    this.injected.transform.baseVal.appendItem(this.pos);
+    this.setPos(x, y);
     this._scripts(this.jscode);
   }
   _scripts(sc) {
