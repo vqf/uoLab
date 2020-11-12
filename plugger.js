@@ -64,8 +64,10 @@ class plugger {
   inject(x, y) {
     this._shadow();
     let o = this.parent.appendChild(this.obj);
-    debugger;
-    o.transform.baseVal.add("translate(" + x + ", " + y + ")");
+    let transl = this.parent.createSVGTransform();
+    transl.setTranslate(x, y);
+    o.transform.baseVal.appendItem(transl);
+    //o.setAttribute("transform", "translate(" + x + ", " + y + ")");
     this._scripts(this.jscode);
   }
   _scripts(sc) {
