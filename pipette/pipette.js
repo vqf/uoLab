@@ -85,6 +85,12 @@ class pipette {
   setPos(x, y) {
     this.plugger.setPos(x, y);
   }
+  move(dx, dy) {
+    this.plugger.move(dx, dy);
+  }
+  rotate(dx, dy) {
+    this.plugger.rotate(dx, dy);
+  }
   inject(x, y) {
     this.plugger.inject(x, y);
   }
