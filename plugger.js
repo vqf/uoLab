@@ -60,28 +60,48 @@ class plugger {
     this.style = _def(style);
     this.pos = this.parent.createSVGTransform();
     this.uid = _uid();
+    this.moveAnim = loadSVGTag({
+      tag: "animateTransform",
+      attributeName: "transform",
+      type: "translate",
+      dur: "2s"
+    });
+    this.rotateAnim = loadSVGTag({
+      tag: "animateTransform",
+      attributeName: "transform",
+      type: "rotate",
+      dur: "2s"
+    });
   }
 
   setPos(x, y) {
     this.pos.setTranslate(x, y);
   }
 
-  move(dx, dy) {
-    let an = {
-      tag: "animateTransform",
-      attributeName: "transform",
-      type: "translate",
-      by: "-50 -50",
-      dur: "2s"
-    };
-    let t = loadSVGTag(an);
-    this.injected.appendChild(t);
+  rotate(angle, dur) {
+    if (typeof dur !== undefined && dur !== undefined) {
+      this.rotateAnim.setAttribute("dur", dur);
+    }
+    this.rotateAnim.setAttribute("by", angle);
+  }
+
+  move(dx, dy, dur) {
+    if (typeof dur !== undefined && dur !== undefined) {
+      this.moveAnim.setAttribute("dur", dur);
+    }
+    this.moveAnim.setAttribute("by", dx + ", " + dy);
+  }
+
+  _initInjected() {
+    this.injected.transform.baseVal.appendItem(this.pos);
+    this.injected.appendChild(this.moveAnim);
+    this.injected.appendChild(this.rotateAnim);
   }
 
   inject(x, y) {
     this._shadow();
     this.injected = this.parent.appendChild(this.obj);
-    this.injected.transform.baseVal.appendItem(this.pos);
+    this._initInjected();
     this.setPos(x, y);
     this._scripts(this.jscode);
   }
