@@ -1,9 +1,5 @@
 let DEBUG = 0;
 
-window.onerror = function(e) {
-  alert(e);
-};
-
 function loadDependencies(scs) {
   scs.forEach(sc => {
     let sid = "ld" + sc.replace(/\./g, "_");
