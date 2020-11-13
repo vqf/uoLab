@@ -1,7 +1,6 @@
 let pipette_code = {
   tag: "g",
   class: "pipette",
-  transform: "scale(2)",
   content: [
     {
       tag: "path",
@@ -82,24 +81,18 @@ rp.addEventListener('click', function(e){release_tip(e)});
 let bp = document.getElementById('local(pipette_body)');
 bp.addEventListener('click', function(e){changeVolume(e)});
 `;
+let tip_behavior = ``;
 
-class pipette {
+class pipette extends plugger {
   constructor(parent) {
     let mp = loadSVGTag(pipette_code);
-    this.plugger = new plugger(parent, mp, pipette_behavior);
-  }
-  setPos(x, y) {
-    this.plugger.setPos(x, y);
-  }
-  move(dx, dy) {
-    this.plugger.move(dx, dy);
-  }
-  rotate(dx, dy) {
-    this.plugger.rotate(dx, dy);
-  }
-  inject(x, y) {
-    this.plugger.inject(x, y);
+    super(parent, mp, pipette_behavior);
   }
 }
 
-if (DEBUG > 0) console.log("Pipette loaded");
+class yellowTip extends plugger {
+  constructor(parent) {
+    let tp = loadSVGTag(yellow_tip);
+    super(parent, tp, tip_behavior);
+  }
+}

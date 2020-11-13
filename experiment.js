@@ -9,4 +9,7 @@ let pipette2 = new pipette(scr);
 pipette2.inject(200, 100);
 pipette2.rotate(-45);
 
+let yt1 = new yellowTip(scr);
+yt1.inject(100, 150);
+
 if (DEBUG > 0) console.log("Experiment loaded");
