@@ -24,5 +24,10 @@
 }
 
 .yellow_tip {
-  fill: #88880055;
+  fill: #aaaa00a0;
+}
+
+.invis {
+  fill: none;
+  stroke: none;
 }

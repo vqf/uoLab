@@ -59,6 +59,7 @@ class plugger {
     this.jscode = _def(jscode);
     this.style = _def(style);
     this.pos = this.parent.createSVGTransform();
+    this.resize = this.parent.createSVGTransform();
     this.uid = _uid();
     this.moveAnim = loadSVGTag({
       tag: "animateTransform",
@@ -92,8 +93,13 @@ class plugger {
     this.moveAnim.setAttribute("by", dx + ", " + dy);
   }
 
+  scale(sx, sy) {
+    this.resize.setScale(sx, sy);
+  }
+
   _initInjected() {
     this.injected.transform.baseVal.appendItem(this.pos);
+    this.injected.transform.baseVal.appendItem(this.resize);
     this.injected.appendChild(this.moveAnim);
     this.injected.appendChild(this.rotateAnim);
   }
