@@ -33,6 +33,18 @@ function _uid() {
   return result;
 }
 
+function getChildById(parent, id) {
+  let ndes = parent.childNodes;
+  let result = null;
+  for (let i = 0; i < ndes.length; i++) {
+    let t = ndes.item(i);
+    if (t.id === id) {
+      result = t;
+    }
+  }
+  return result;
+}
+
 function _def() {
   var result = "";
   for (var i = 0; i < arguments.length; i++) {
@@ -73,6 +85,7 @@ class plugger {
       type: "rotate",
       dur: "2s"
     });
+    this.drag = {};
   }
 
   setPos(x, y) {
@@ -95,6 +108,16 @@ class plugger {
 
   scale(sx, sy) {
     this.resize.setScale(sx, sy);
+  }
+
+  _startDrag(e) {
+    console.log(e);
+  }
+
+  makeDraggable(obj) {
+    obj.addEventlistener("mousedown", function(e) {
+      this._startDrag(e);
+    });
   }
 
   _initInjected() {
