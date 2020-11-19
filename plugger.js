@@ -163,7 +163,7 @@ class plugger {
     const pt = this._actOnMouse(e);
     const dx = pt[0] - this.drag.from.x;
     const dy = pt[1] - this.drag.from.y;
-    this.move(dx, dy, this.drag.dt);
+    this.move(dx, dy);
     this.drag.from.x = pt[0];
     this.drag.from.y = pt[1];
   }
