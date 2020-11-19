@@ -94,7 +94,10 @@ class pipette extends plugger {
   constructor(parent) {
     let mp = loadSVGTag(pipette_code);
     super(parent, mp, pipette_behavior);
-    let bod = getChildById(mp, "pipette_body");
+  }
+  inject(x, y) {
+    super.inject(x, y);
+    let bod = this.getElementByLocalId("pipette_body");
     this.makeDraggable(bod);
   }
 }

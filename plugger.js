@@ -33,18 +33,6 @@ function _uid() {
   return result;
 }
 
-function getChildById(parent, id) {
-  let ndes = parent.childNodes;
-  let result = null;
-  for (let i = 0; i < ndes.length; i++) {
-    let t = ndes.item(i);
-    if (t.id === id) {
-      result = t;
-    }
-  }
-  return result;
-}
-
 function _def() {
   var result = "";
   for (var i = 0; i < arguments.length; i++) {
@@ -88,6 +76,12 @@ class plugger {
     this.drag = {};
   }
 
+  getElementByLocalId(lid) {
+    let id = lid + this.uid;
+    let result = document.getElementById(id);
+    return result;
+  }
+
   setPos(x, y) {
     this.pos.setTranslate(x, y);
   }
@@ -115,8 +109,9 @@ class plugger {
   }
 
   makeDraggable(obj) {
-    obj.addEventlistener("mousedown", function(e) {
-      this._startDrag(e);
+    let myself = this;
+    obj.addEventListener("mousedown", function(e) {
+      myself._startDrag(e);
     });
   }
 
@@ -128,6 +123,8 @@ class plugger {
   }
 
   inject(x, y) {
+    x = _def(x);
+    y = _def(y);
     this._shadow();
     this.injected = this.parent.appendChild(this.obj);
     this._initInjected();
