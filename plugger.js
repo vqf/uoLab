@@ -156,7 +156,7 @@ class plugger {
     const pt = this._actOnMouse(e);
     this.drag.from.x = pt[0];
     this.drag.from.y = pt[1];
-    this.drag.time = 
+    this.drag.time = this.drag.date.getTime();
   }
 
   _drag(e) {
@@ -179,7 +179,7 @@ class plugger {
       e
     ) {
       let dt = this.drag.date.getTime() - this.drag.time;
-      debugger
+      debugger;
       if (myself.drag.isDragging === true && dt >= this.drag.dtms) {
         myself._drag(e);
         this.drag.time = this.drag.date.getTime();
