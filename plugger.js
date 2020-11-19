@@ -156,7 +156,7 @@ class plugger {
     const pt = this._actOnMouse(e);
     this.drag.from.x = pt[0];
     this.drag.from.y = pt[1];
-    this.drag.time = this.drag.date.getTime();
+    this.drag.time = this.drag.getTime();
   }
 
   _drag(e) {
@@ -178,11 +178,11 @@ class plugger {
     this.drag.dragEvents.mousemove = obj.addEventListener("mousemove", function(
       e
     ) {
-      let dt = this.drag.date.getTime() - this.drag.time;
+      let dt = this.date.getTime() - this.drag.time;
       debugger;
       if (myself.drag.isDragging === true && dt >= this.drag.dtms) {
         myself._drag(e);
-        this.drag.time = this.drag.date.getTime();
+        this.drag.time = this.date.getTime();
       }
     });
     this.drag.dragEvents.mouseup = obj.addEventListener("mouseup", function(e) {
