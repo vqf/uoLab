@@ -60,6 +60,7 @@ class plugger {
     this.style = _def(style);
     this.pos = this.parent.createSVGTransform();
     this.resize = this.parent.createSVGTransform();
+    this.pt = this.parent.createSVGPoint();
     this.uid = _uid();
     this.moveAnim = loadSVGTag({
       tag: "animateTransform",
@@ -73,7 +74,27 @@ class plugger {
       type: "rotate",
       dur: "2s"
     });
-    this.drag = {};
+    this.date = new Date();
+    this.drag = this._dragData();
+  }
+
+  _dragData() {
+    let result = {
+      isDragging: false,
+      from: {
+        x: 0,
+        y: 0
+      },
+      time: this.date.getTime(),
+      dt: "0.5s",
+      dtms = 5000,
+      dragEvents: {
+        mousedown: null,
+        mouseup: null,
+        mousemove: null
+      }
+    };
+    return result;
   }
 
   getElementByLocalId(lid) {
@@ -104,14 +125,70 @@ class plugger {
     this.resize.setScale(sx, sy);
   }
 
+  _transformAbsPoint(x, y) {
+    var svg = this.parent;
+    var pt = this.pt;
+    pt.x = x;
+    pt.y = y;
+    var loc = pt.matrixTransform(svg.getScreenCTM().inverse());
+    var cx = loc.x;
+    var cy = loc.y;
+    return [cx, cy, loc.x, loc.y];
+  }
+  _actOnMouse(evt) {
+    var x = 0;
+    var y = 0;
+    if (typeof evt.touches !== "undefined" && evt.touches.length > 0) {
+      // Tablet
+      x = evt.touches[0].clientX;
+      y = evt.touches[0].clientY;
+    } else {
+      x = evt.clientX;
+      y = evt.clientY;
+    }
+    var result = this._transformAbsPoint(x, y);
+    result.push(evt);
+    return result;
+  }
+
   _startDrag(e) {
-    console.log(e);
+    this.drag.isDragging = true;
+    const pt = this._actOnMouse(e);
+    this.drag.from.x = pt[0];
+    this.drag.from.y = pt[1];
+    this.drag.time = 
+  }
+
+  _drag(e) {
+    const pt = this._actOnMouse(e);
+    const dx = pt[0] - this.drag.from.x;
+    const dy = pt[1] - this.drag.from.y;
+    this.move(dx, dy, this.drag.dt);
+    this.drag.from.x = pt[0];
+    this.drag.from.y = pt[1];
   }
 
   makeDraggable(obj) {
     let myself = this;
-    obj.addEventListener("mousedown", function(e) {
+    this.drag.dragEvents.mousedown = obj.addEventListener("mousedown", function(
+      e
+    ) {
       myself._startDrag(e);
+    });
+    this.drag.dragEvents.mousemove = obj.addEventListener("mousemove", function(
+      e
+    ) {
+      let dt = this.drag.date.getTime() - this.drag.time;
+      debugger
+      if (myself.drag.isDragging === true && dt >= this.drag.dtms) {
+        myself._drag(e);
+        this.drag.time = this.drag.date.getTime();
+      }
+    });
+    this.drag.dragEvents.mouseup = obj.addEventListener("mouseup", function(e) {
+      if (this.drag.isDragging === true) {
+        myself.drag.isDragging = false;
+      }
     });
   }
 
