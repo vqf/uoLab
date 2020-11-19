@@ -87,7 +87,7 @@ class plugger {
       },
       //time: this.date.getTime(),
       dt: "0.5s",
-      dtms = 5000,
+      dtms: 5000,
       dragEvents: {
         mousedown: null,
         mouseup: null,
@@ -180,7 +180,8 @@ class plugger {
     ) {
       //let dt = myself.date.getTime() - myself.drag.time;
       //debugger;
-      if (myself.drag.isDragging === true ){ //&& dt >= myself.drag.dtms) {
+      if (myself.drag.isDragging === true) {
+        //&& dt >= myself.drag.dtms) {
         myself._drag(e);
         //myself.drag.time = myself.date.getTime();
       }
