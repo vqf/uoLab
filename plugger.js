@@ -87,7 +87,7 @@ class plugger {
         y: 0
       },
       time: Date.now(),
-      dt: "0.1s",
+      dt: "0s",
       dtms: 100,
       dragEvents: {
         mousedown: null,
