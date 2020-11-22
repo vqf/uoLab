@@ -104,10 +104,6 @@ class plugger {
     return result;
   }
 
-  _pos() {
-    console.log(this.pos);
-  }
-
   setPos(x, y) {
     this.pos.setTranslate(x, y);
   }
@@ -162,15 +158,15 @@ class plugger {
   _startDrag(e) {
     this.drag.isDragging = true;
     const pt = this._actOnMouse(e);
-    this.drag.from.x = this.pos.matrix.e;
-    this.drag.from.y = this.pos.matrix.f;
+    this.drag.from.dx = pt[0] - this.pos.matrix.e;
+    this.drag.from.dy = pt[1] - this.pos.matrix.f;
     this.drag.time = Date.now();
   }
 
   _drag(e) {
     const pt = this._actOnMouse(e);
-    const dx = pt[0] - this.drag.from.x;
-    const dy = pt[1] - this.drag.from.y;
+    const dx = pt[0] - this.drag.from.dx;
+    const dy = pt[1] - this.drag.from.dy;
     this.setPos(dx, dy);
   }
 
