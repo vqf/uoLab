@@ -14,10 +14,9 @@ class animateme {
     }
     return result;
   }
-  
+
   addObject(obj) {
     if (this._isNewObject(obj)) {
-      this.objects[obj] = 1;
       this.objectList.push(obj);
     }
   }

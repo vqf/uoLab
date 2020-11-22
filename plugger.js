@@ -88,7 +88,7 @@ class plugger {
       },
       time: Date.now(),
       dt: "0s",
-      dtms: 100,
+      dtms: 0,
       dragEvents: {
         mousedown: null,
         mouseup: null,
@@ -102,6 +102,10 @@ class plugger {
     let id = lid + this.uid;
     let result = document.getElementById(id);
     return result;
+  }
+
+  _pos() {
+    console.log(this.pos);
   }
 
   setPos(x, y) {
@@ -158,8 +162,8 @@ class plugger {
   _startDrag(e) {
     this.drag.isDragging = true;
     const pt = this._actOnMouse(e);
-    this.drag.from.x = pt[0];
-    this.drag.from.y = pt[1];
+    this.drag.from.x = this.pos.matrix.e;
+    this.drag.from.y = this.pos.matrix.f;
     this.drag.time = Date.now();
   }
 
@@ -167,9 +171,7 @@ class plugger {
     const pt = this._actOnMouse(e);
     const dx = pt[0] - this.drag.from.x;
     const dy = pt[1] - this.drag.from.y;
-    this.move(dx, dy);
-    this.drag.from.x = pt[0];
-    this.drag.from.y = pt[1];
+    this.setPos(dx, dy);
   }
 
   makeDraggable(obj) {
