@@ -70,24 +70,30 @@ let yellow_tip = {
     "m 13.325755,89.800433 c 0.126663,-2.206485 0.253271,-3.185743 0.379918,-4.165296 -0.316623,0.02967 -0.632961,0.05931 -0.949756,0.05932 -0.316795,1.1e-5 -0.633361,-0.02965 -0.949984,-0.05932 0.12665,0.979553 0.253242,1.958659 0.379931,4.165614 0.126688,2.206956 0.253319,5.639813 0.379969,9.073196 0,0 0.37995,0 0.37995,0 0.12665,-3.433383 0.25331,-6.867029 0.379972,-9.073514 z"
 };
 
-let pipette_behavior = `
-function depress_plunger(e){
-  let tp = document.getElementById('local(pipette_plunger)');
-  toggleClass(tp, 'depressed_plunger');
+function pipette_behavior() {
+  function depress_plunger(e) {
+    let tp = document.getElementById("local(pipette_plunger)");
+    toggleClass(tp, "depressed_plunger");
+  }
+  function release_tip(e) {
+    console.log("releasing");
+  }
+  function changeVolume(e) {
+    //console.log(e);
+  }
+  let tp = document.getElementById("local(pipette_plunger)");
+  tp.addEventListener("click", function(e) {
+    depress_plunger(e);
+  });
+  let rp = document.getElementById("local(pipette_unloader)");
+  rp.addEventListener("click", function(e) {
+    release_tip(e);
+  });
+  let bp = document.getElementById("local(pipette_body)");
+  bp.addEventListener("click", function(e) {
+    changeVolume(e);
+  });
 }
-function release_tip(e){
-  console.log('releasing');
-}
-function changeVolume(e){
-  console.log(e);
-}
-let tp = document.getElementById('local(pipette_plunger)');
-tp.addEventListener('click', function(e){depress_plunger(e)});
-let rp = document.getElementById('local(pipette_unloader)');
-rp.addEventListener('click', function(e){release_tip(e)});
-let bp = document.getElementById('local(pipette_body)');
-bp.addEventListener('click', function(e){changeVolume(e)});
-`;
 let tip_behavior = ``;
 
 class pipette extends plugger {

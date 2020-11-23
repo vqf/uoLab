@@ -56,7 +56,7 @@ class plugger {
   constructor(parent, obj, jscode, style) {
     this.parent = _def(parent, document);
     this.obj = _def(obj);
-    this.jscode = _def(jscode);
+    this.jscode = _def(jscode.toString());
     this.style = _def(style);
     this.pos = this.parent.createSVGTransform();
     this.resize = this.parent.createSVGTransform();
@@ -236,6 +236,15 @@ class plugger {
       document.head.appendChild(s);
     }
   }
+
+  _innerjs() {
+    let of = /function[\s\n\r]+[^\s\n\r]*[\s\n\r]*\([^\)]*\)[\s\n\r]*\{(.+)\}/ms;
+    let oc = of.exec(this.jscode);
+    oc.shift;
+    if (oc.length > 0) {
+      this.jscode = oc[0];
+    }
+  }
   _shadow() {
     this.obj.innerHTML = this.obj.innerHTML.replace(
       /(id\s*=\s*[\"\'])([^\"\']+)([\"\'])/g,
@@ -245,6 +254,7 @@ class plugger {
       /(#)([^\{]+)\s*(\{)/g,
       "$1" + "$2" + this.uid + "$3"
     );
+    this._innerjs();
     this._convertVars();
     this._convertFuncts();
     this._convertLocals();
