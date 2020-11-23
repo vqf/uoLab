@@ -240,7 +240,7 @@ class plugger {
   _innerjs() {
     let of = /function[\s\n\r]+[^\s\n\r]*[\s\n\r]*\([^\)]*\)[\s\n\r]*\{(.+)\}/ms;
     let oc = of.exec(this.jscode);
-    oc.shift;
+    oc.shift();
     if (oc.length > 0) {
       this.jscode = oc[0];
     }

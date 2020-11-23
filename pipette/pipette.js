@@ -93,6 +93,7 @@ function pipette_behavior() {
   bp.addEventListener("click", function(e) {
     changeVolume(e);
   });
+  debugger;
 }
 let tip_behavior = ``;
 
