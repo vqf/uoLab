@@ -23,7 +23,7 @@ function loadDependencies(scs) {
 
 function loadStyles(scs) {
   scs.forEach(sc => {
-    let sid = "ld" + sc.replace(/\./g, "_");
+    let sid = "ld" + sc.replace(/[^\w\d\-\_]/g, "_");
     let s = document.getElementById(sid);
     if (s === null) {
       s = document.createElement("link");
