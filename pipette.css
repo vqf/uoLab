@@ -1,0 +1,33 @@
+.pipette_top,
+.pipette_body {
+  fill: #004d00;
+}
+.pipette_unloader {
+  fill: #001c00;
+  transition: transform 0.2s;
+}
+
+.pipette_unloader:active {
+  transform: translate(0, 1.1px);
+}
+
+.pipette_piston,
+.pipette_tipholder {
+  fill: #555555;
+}
+
+.pipette_plunger {
+  transition: transform 0.7s ease;
+}
+.depressed_plunger {
+  transform: translate(0, 4px);
+}
+
+.yellow_tip {
+  fill: #aaaa00a0;
+}
+
+.invis {
+  fill: none;
+  stroke: none;
+}
