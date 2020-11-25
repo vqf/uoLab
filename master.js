@@ -39,9 +39,9 @@ loadDependencies([
   "asyncanim.js",
   "plugger.js",
   "loadTag.js",
-  "pipette.js",
+  "pipette/pipette.js",
   "experiment.js"
 ]);
-loadStyles(["pipette.css"]);
+loadStyles(["pipette/pipette.css"]);
 
 if (DEBUG > 0) console.log("Master loaded");
