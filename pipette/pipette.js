@@ -95,7 +95,7 @@ function pipette_behavior() {
   });
   debugger;
 }
-let tip_behavior = ``;
+function tip_behavior() {}
 
 class pipette extends plugger {
   constructor(parent) {
