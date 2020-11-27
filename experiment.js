@@ -1,4 +1,5 @@
 let scr = document.getElementById("screen");
+let sc = new scene(scr);
 let pipette1 = new pipette(scr);
 pipette1.scale(2, 2);
 pipette1.inject(100, 100);
