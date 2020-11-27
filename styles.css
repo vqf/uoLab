@@ -5,6 +5,11 @@ body {
   padding: 0;
   margin: 0;
 }
+
+/* DEBUG */
 .grid {
   stroke: black;
+}
+.debugBox {
+  fill: blue;
 }

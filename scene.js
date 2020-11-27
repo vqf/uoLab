@@ -10,6 +10,21 @@ class scene {
       y: this.h / nboxes
     };
   }
+
+  /* DEBUG */
+  _showBox(nx, ny) {
+    let x0 = nx * this.box.x;
+    let y0 = nx * this.box.y;
+    let r = loadSVGTag({
+      tag: "rect",
+      class: "debugBox",
+      x: x0,
+      y: y0,
+      width: this.box.x,
+      height: this.box.y
+    });
+    this.svg.insertBefore(r, this.svg.firstChild);
+  }
   _showGrid() {
     for (let i = 0; i < this.w; i += this.box.x) {
       let l = loadSVGTag({
