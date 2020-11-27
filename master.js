@@ -36,7 +36,7 @@ function loadStyles(scs) {
 }
 
 loadDependencies([
-  "asyncanim.js",
+  "scene.js",
   "plugger.js",
   "loadTag.js",
   "pipette/pipette.js",
