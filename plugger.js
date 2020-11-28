@@ -54,7 +54,7 @@ function toggleClass(obj, classname) {
 
 class plugger {
   constructor(parent, obj, jscode, style) {
-    this.parent = _def(parent, document);
+    this.parent = parent.getSvg();
     this.obj = _def(obj);
     this.jscode = _def(jscode.toString());
     this.style = _def(style);

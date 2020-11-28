@@ -2,13 +2,28 @@ class scene {
   constructor(svg) {
     this.svg = svg;
     this.lognBoxes = 6; // 64 boxes
-    this.w = svg.getBoundingClientRect().width;
-    this.h = svg.getBoundingClientRect().height;
-    let nboxes = 1 << this.lognBoxes;
-    this.box = {
-      x: this.w / nboxes,
-      y: this.h / nboxes
+    let myself = this;
+    this._initBoxes(null, myself);
+    let f = this._initBoxes;
+    let onthefly = function(evt) {
+      f(evt, myself);
     };
+    window.addEventListener("resize", onthefly);
+  }
+
+  _initBoxes(evt, myself) {
+    myself.w = myself.svg.getBoundingClientRect().width;
+    myself.h = myself.svg.getBoundingClientRect().height;
+    let nboxes = 1 << myself.lognBoxes;
+    myself.box = {
+      x: myself.w / nboxes,
+      y: myself.h / nboxes
+    };
+    myself._showGrid();
+    myself._hideGrid();
+  }
+  getSvg() {
+    return this.svg;
   }
 
   /* DEBUG */
@@ -24,6 +39,12 @@ class scene {
       height: this.box.y
     });
     this.svg.insertBefore(r, this.svg.firstChild);
+  }
+  _hideGrid() {
+    let g = document.getElementsByClassName("grid");
+    for (let i = 0; i < g.length; i++) {
+      g.item(i).parentElement.removeChild(g.item(i));
+    }
   }
   _showGrid() {
     for (let i = 0; i < this.w; i += this.box.x) {
