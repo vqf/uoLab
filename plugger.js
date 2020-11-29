@@ -87,9 +87,20 @@ class plugger {
   _add(where, el) {
     let tuid = el.id;
     let o = document.getElementById(tuid);
-    if (typeof o === "undefined") {
+    if (o === null) {
       where.appendChild(el);
     }
+  }
+
+  _addSVGDef(el) {
+    let d = this.parent.querySelector("defs");
+    if (d === null) {
+      let df = {
+        tag: "defs"
+      };
+      d = this.parent.appendChild(loadSVGTag(df));
+    }
+    d.appendChild(el);
   }
 
   _mine(n) {
@@ -97,16 +108,29 @@ class plugger {
   }
 
   _hoverfilter() {
+    let s = {
+      tag: "style",
+      id: this._mine("st"),
+      content: `
+        .${this._mine("g")}:hover{
+          filter: url("#${this._mine("blur")}")
+        }
+      `
+    };
     let f = {
       tag: "filter",
       id: this._mine("blur"),
       content: [
         {
-          tag: "feGaussianBlur",
-          stdDeviation: 5
+          tag: "feDropShadow",
+          dx: 0.2,
+          dy: 0.2,
+          stdDeviation: 0.5
         }
       ]
     };
+    let st = loadSVGTag(s);
+    this._addSVGDef(st);
     let c = loadSVGTag(f);
     this._add(this.parent, c);
   }
@@ -242,6 +266,7 @@ class plugger {
     y = _def(y);
     this._shadow();
     this.injected = this.parent.appendChild(this.obj);
+    this.injected.classList.add(this._mine("g"));
     this._initInjected();
     this.setPos(x, y);
     this._scripts(this.jscode);
