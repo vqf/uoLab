@@ -55,16 +55,18 @@ function toggleClass(obj, classname) {
 class plugger {
   constructor(parent, obj, jscode, style) {
     this.parent = parent;
+    this.publicuid = "amnfabenfo";
     if (parent instanceof scene) {
       this.parent = parent.getSvg();
     }
     this.obj = _def(obj);
     this.jscode = _def(jscode.toString());
     this.style = _def(style);
+    this.uid = _uid();
+    this._hoverfilter();
     this.pos = this.parent.createSVGTransform();
     this.resize = this.parent.createSVGTransform();
     this.pt = this.parent.createSVGPoint();
-    this.uid = _uid();
     this.moveAnim = loadSVGTag({
       tag: "animateTransform",
       attributeName: "transform",
@@ -80,6 +82,33 @@ class plugger {
       dur: "2s"
     });
     this.drag = this._dragData();
+  }
+
+  _add(where, el) {
+    let tuid = el.id;
+    let o = document.getElementById(tuid);
+    if (typeof o === "undefined") {
+      where.appendChild(el);
+    }
+  }
+
+  _mine(n) {
+    return n + this.publicuid;
+  }
+
+  _hoverfilter() {
+    let f = {
+      tag: "filter",
+      id: this._mine("blur"),
+      content: [
+        {
+          tag: "feGaussianBlur",
+          stdDeviation: 5
+        }
+      ]
+    };
+    let c = loadSVGTag(f);
+    this._add(this.parent, c);
   }
 
   _dragData() {
