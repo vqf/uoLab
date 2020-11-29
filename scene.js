@@ -19,8 +19,8 @@ class scene {
       x: myself.w / nboxes,
       y: myself.h / nboxes
     };
-    myself._hideGrid();
-    myself._showGrid();
+    //myself._hideGrid();
+    //myself._showGrid();
   }
   getSvg() {
     return this.svg;
