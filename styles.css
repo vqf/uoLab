@@ -9,6 +9,8 @@ body {
 /* DEBUG */
 .grid {
   stroke: black;
+  stroke-width: 0.3;
+  stroke-dasharray: 1 1;
 }
 .debugBox {
   fill: blue;

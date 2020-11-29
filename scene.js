@@ -19,8 +19,8 @@ class scene {
       x: myself.w / nboxes,
       y: myself.h / nboxes
     };
-    myself._showGrid();
     myself._hideGrid();
+    myself._showGrid();
   }
   getSvg() {
     return this.svg;
@@ -41,33 +41,39 @@ class scene {
     this.svg.insertBefore(r, this.svg.firstChild);
   }
   _hideGrid() {
-    let g = document.getElementsByClassName("grid");
-    for (let i = 0; i < g.length; i++) {
-      g.item(i).parentElement.removeChild(g.item(i));
+    let g = document.getElementById("grid");
+    if (g !== null) {
+      g.parentElement.removeChild(g);
     }
   }
   _showGrid() {
+    let grd = {
+      tag: "g",
+      id: "grid",
+      content: []
+    };
     for (let i = 0; i < this.w; i += this.box.x) {
-      let l = loadSVGTag({
+      let l = {
         tag: "line",
         class: "grid",
         x1: i,
         y1: 0,
         x2: i,
         y2: this.h
-      });
-      this.svg.appendChild(l);
+      };
+      grd.content.push(l);
     }
     for (let i = 0; i < this.h; i += this.box.y) {
-      let l = loadSVGTag({
+      let l = {
         tag: "line",
         class: "grid",
         x1: 0,
         y1: i,
         x2: this.w,
         y2: i
-      });
-      this.svg.appendChild(l);
+      };
+      grd.content.push(l);
     }
+    this.svg.appendChild(loadSVGTag(grd));
   }
 }
