@@ -14,4 +14,7 @@ for (let i = 0; i < 20; i++) {
   newtip.inject(i * 5, 100);
 }
 
+let epp = new tube(sc);
+epp.inject(100, 150);
+
 if (DEBUG > 0) console.log("Experiment loaded");

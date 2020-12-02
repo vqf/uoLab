@@ -283,6 +283,7 @@ class plugger {
     }
   }
   _styles(sc) {
+    if (sc === null) return;
     let sid = "style" + sc.replace(/\./g, "_");
     let s = document.getElementById(sid);
     if (s === null) {

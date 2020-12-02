@@ -40,8 +40,9 @@ loadDependencies([
   "plugger.js",
   "loadTag.js",
   "pipette/pipette.js",
+  "tube/tube.js",
   "experiment.js"
 ]);
-loadStyles(["pipette/pipette.css"]);
+loadStyles(["pipette/pipette.css", "tube/tube/css"]);
 
 if (DEBUG > 0) console.log("Master loaded");
