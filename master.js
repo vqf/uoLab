@@ -43,6 +43,6 @@ loadDependencies([
   "tube/tube.js",
   "experiment.js"
 ]);
-loadStyles(["pipette/pipette.css", "tube/tube/css"]);
+loadStyles(["pipette/pipette.css", "tube/tube.css"]);
 
 if (DEBUG > 0) console.log("Master loaded");
