@@ -304,10 +304,12 @@ class plugger {
     }
   }
   _shadow() {
-    this.obj.innerHTML = this.obj.innerHTML.replace(
-      /(id\s*=\s*[\"\'])([^\"\']+)([\"\'])/g,
-      "$1" + "$2" + this.uid + "$3"
-    );
+    this.obj.innerHTML = this.obj.innerHTML
+      .replace(
+        /(id\s*=\s*[\"\'])([^\"\']+)([\"\'])/g,
+        "$1" + "$2" + this.uid + "$3"
+      )
+      .replace(/local\(([^\)]+)\)/g, "$1" + this.uid);
     this.style = this.style.replace(
       /(#)([^\{]+)\s*(\{)/g,
       "$1" + "$2" + this.uid + "$3"
