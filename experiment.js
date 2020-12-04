@@ -16,5 +16,6 @@ for (let i = 0; i < 20; i++) {
 
 let epp = new tube(sc);
 epp.inject(100, 150);
+epp.rotate(50, "3s");
 
 if (DEBUG > 0) console.log("Experiment loaded");

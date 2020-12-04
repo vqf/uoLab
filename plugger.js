@@ -169,7 +169,7 @@ class plugger {
       this.rotateAnim.setAttribute("dur", dur);
     }
     this.rotateAnim.setAttribute("by", angle);
-    this.moveAnim.beginElement();
+    this.rotateAnim.beginElement();
   }
 
   move(dx, dy, dur) {
