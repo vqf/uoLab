@@ -61,6 +61,7 @@ class tube extends plugger {
   constructor(parent) {
     let mp = loadSVGTag(tube_code);
     super(parent, mp, tube_behavior);
+    this.scaleCorrection = 0.6;
   }
   inject(x, y) {
     super.inject(x, y);

@@ -64,7 +64,9 @@ class plugger {
     this.style = _def(style);
     this.uid = _uid();
     this._hoverfilter();
+    this.scaleCorrection = 1;
     this.pos = this.parent.createSVGTransform();
+    this.angle = this.parent.createSVGTransform();
     this.resize = this.parent.createSVGTransform();
     this.pt = this.parent.createSVGPoint();
     this.moveAnim = loadSVGTag({
@@ -72,7 +74,6 @@ class plugger {
       attributeName: "transform",
       type: "translate",
       begin: "indefinite",
-      fill: "freeze",
       dur: "2s"
     });
     this.rotateAnim = loadSVGTag({
@@ -80,7 +81,6 @@ class plugger {
       attributeName: "transform",
       begin: "indefinite",
       type: "rotate",
-      fill: "freeze",
       dur: "2s"
     });
     this.drag = this._dragData();
@@ -165,6 +165,20 @@ class plugger {
   setPos(x, y) {
     this.pos.setTranslate(x, y);
   }
+  setAngle(a, x, y) {
+    if (typeof x === "undefined") {
+      x = 0;
+      y = 0;
+    }
+    this.angle.setRotate(a, x, y);
+  }
+  _sa(myself, a, x, y) {
+    if (typeof x === "undefined") {
+      x = 0;
+      y = 0;
+    }
+    myself.angle.setRotate(a, x, y);
+  }
 
   rotate(angle, dur, x, y) {
     if (typeof x === "undefined") {
@@ -176,6 +190,15 @@ class plugger {
     }
     //this.rotateAnim.setAttribute("from", `0 ${x} ${y}`);
     this.rotateAnim.setAttribute("by", `${angle} ${x} ${y}`);
+    let myself = this;
+    let f = this._sa;
+    let onthefly = function() {
+      f(myself, angle, x, y);
+    };
+    this.rotateEndListener = this.rotateAnim.addEventListener(
+      "endEvent",
+      onthefly
+    );
     this.rotateAnim.beginElement();
   }
 
@@ -262,9 +285,11 @@ class plugger {
 
   _initInjected() {
     this.injected.transform.baseVal.appendItem(this.pos);
+    this.injected.transform.baseVal.appendItem(this.angle);
     this.injected.transform.baseVal.appendItem(this.resize);
     this.injected.appendChild(this.moveAnim);
     this.injected.appendChild(this.rotateAnim);
+    this.scale(this.scaleCorrection, this.scaleCorrection);
   }
 
   inject(x, y) {
