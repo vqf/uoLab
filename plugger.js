@@ -74,6 +74,7 @@ class plugger {
       attributeName: "transform",
       type: "translate",
       begin: "indefinite",
+      fill: "freeze",
       dur: "2s"
     });
     this.rotateAnim = loadSVGTag({
@@ -81,6 +82,7 @@ class plugger {
       attributeName: "transform",
       begin: "indefinite",
       type: "rotate",
+      fill: "freeze",
       dur: "2s"
     });
     this.drag = this._dragData();
@@ -173,6 +175,7 @@ class plugger {
     this.angle.setRotate(a, x, y);
   }
   _sa(myself, a, x, y) {
+    myself.rotateAnim.setAttribute("fill", "remove");
     if (typeof x === "undefined") {
       x = 0;
       y = 0;
