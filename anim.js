@@ -20,12 +20,11 @@ class anim {
     let tdy = te * this.target.y;
     let sdx = tdx - this.lastValues.x;
     let sdy = tdy - this.lastValues.y;
-    console.log(`${sdy} ${tdy}`);
     this.obj.setTranslate(sdx, sdy);
     this.lastValues.x = tdx;
     this.lastValues.y = tdy;
   }
-  _loop(refresh) {
+  _loop() {
     let te = (Date.now() - this.ct) / (1000 * this.tdt);
     this.fref(te);
     if (te < 1) {
