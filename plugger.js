@@ -171,9 +171,9 @@ class plugger {
 
   move(dx, dy, dur) {
     if (typeof dur === undefined && dur === undefined) {
-      dur = "1s";
+      dur = 1;
     }
-    this.anim.pos.animate(`${dx}, ${dy}`, dur);
+    this.anim.pos.animTranslate(dx, dy, dur);
   }
 
   scale(sx, sy) {
