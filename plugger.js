@@ -125,7 +125,7 @@ class plugger {
   }
 
   _getBoundingBox() {
-    return this.injected.getBBox();
+    return this.injected.getBoundingClientRect();
   }
 
   _dragData() {
@@ -164,20 +164,32 @@ class plugger {
     this.angle.setRotate(a, x, y);
   }
 
+  _pointer(x, y) {
+    let d = loadSVGTag({
+      tag: "circle",
+      cx: x,
+      cy: y,
+      r: 10,
+      class: "pointer"
+    });
+    this.parent.appendChild(d);
+  }
+
   rotate(angle, dur, x, y) {
     if (typeof x === "undefined") {
       let bb = this._getBoundingBox();
       x = bb.x + bb.width / 2;
       y = bb.y + bb.height / 2;
+      this._pointer(x, y);
     }
-    if (typeof dur === "undefined" && dur === undefined) {
+    if (typeof dur === "undefined" || dur === undefined) {
       dur = 1;
     }
     this.anim.angle.animRotate(angle, x, y, dur);
   }
 
   move(dx, dy, dur) {
-    if (typeof dur === undefined && dur === undefined) {
+    if (typeof dur === undefined || dur === undefined) {
       dur = 1;
     }
     this.anim.pos.animTranslate(dx, dy, dur);
