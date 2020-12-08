@@ -69,23 +69,6 @@ class plugger {
     this.angle = this.parent.createSVGTransform();
     this.resize = this.parent.createSVGTransform();
     this.pt = this.parent.createSVGPoint();
-    this.moveAnim = loadSVGTag({
-      tag: "animateTransform",
-      attributeName: "transform",
-      type: "translate",
-      begin: "indefinite",
-      fill: "freeze",
-      dur: "2s"
-    });
-    this.rotateAnim = loadSVGTag({
-      tag: "animateTransform",
-      attributeName: "transform",
-      begin: "indefinite",
-      type: "rotate",
-      fill: "freeze",
-      dur: "2s"
-    });
-    this.drag = this._dragData();
   }
 
   _add(where, el) {
@@ -174,14 +157,6 @@ class plugger {
     }
     this.angle.setRotate(a, x, y);
   }
-  _sa(myself, a, x, y) {
-    myself.rotateAnim.setAttribute("fill", "remove");
-    if (typeof x === "undefined") {
-      x = 0;
-      y = 0;
-    }
-    myself.angle.setRotate(a, x, y);
-  }
 
   rotate(angle, dur, x, y) {
     if (typeof x === "undefined") {
@@ -189,28 +164,12 @@ class plugger {
       y = 0;
     }
     if (typeof dur !== undefined && dur !== undefined) {
-      this.rotateAnim.setAttribute("dur", dur);
     }
-    //this.rotateAnim.setAttribute("from", `0 ${x} ${y}`);
-    this.rotateAnim.setAttribute("by", `${angle} ${x} ${y}`);
-    let myself = this;
-    let f = this._sa;
-    let onthefly = function() {
-      f(myself, angle, x, y);
-    };
-    this.rotateEndListener = this.rotateAnim.addEventListener(
-      "endEvent",
-      onthefly
-    );
-    this.rotateAnim.beginElement();
   }
 
   move(dx, dy, dur) {
     if (typeof dur !== undefined && dur !== undefined) {
-      this.moveAnim.setAttribute("dur", dur);
     }
-    this.moveAnim.setAttribute("by", dx + ", " + dy);
-    this.moveAnim.beginElement();
   }
 
   scale(sx, sy) {
@@ -290,8 +249,6 @@ class plugger {
     this.injected.transform.baseVal.appendItem(this.pos);
     this.injected.transform.baseVal.appendItem(this.angle);
     this.injected.transform.baseVal.appendItem(this.resize);
-    this.injected.appendChild(this.moveAnim);
-    this.injected.appendChild(this.rotateAnim);
     this.scale(this.scaleCorrection, this.scaleCorrection);
   }
 
