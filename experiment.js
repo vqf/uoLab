@@ -5,7 +5,6 @@ let sc = new scene(scr);
 let pipette1 = new pipette(sc);
 pipette1.inject(100, 100);
 pipette1.scale(2, 2);
-pipette1.rotate(20);
 
 let tips = [];
 for (let i = 0; i < 20; i++) {
@@ -17,5 +16,6 @@ for (let i = 0; i < 20; i++) {
 
 let epp = new tube(sc);
 epp.inject(100, 150);
+epp.move(50, 10);
 
 if (DEBUG > 0) console.log("Experiment loaded");

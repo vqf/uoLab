@@ -68,7 +68,9 @@ class plugger {
     this.pos = this.parent.createSVGTransform();
     this.angle = this.parent.createSVGTransform();
     this.resize = this.parent.createSVGTransform();
+    this.anim = {};
     this.pt = this.parent.createSVGPoint();
+    this.drag = this._dragData();
   }
 
   _add(where, el) {
@@ -168,8 +170,10 @@ class plugger {
   }
 
   move(dx, dy, dur) {
-    if (typeof dur !== undefined && dur !== undefined) {
+    if (typeof dur === undefined && dur === undefined) {
+      dur = "1s";
     }
+    this.anim.pos.animate(`${dx}, ${dy}`, dur);
   }
 
   scale(sx, sy) {
@@ -249,6 +253,7 @@ class plugger {
     this.injected.transform.baseVal.appendItem(this.pos);
     this.injected.transform.baseVal.appendItem(this.angle);
     this.injected.transform.baseVal.appendItem(this.resize);
+    this.anim.pos = new anim(this.pos);
     this.scale(this.scaleCorrection, this.scaleCorrection);
   }
 

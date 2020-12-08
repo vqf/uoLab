@@ -37,6 +37,7 @@ function loadStyles(scs) {
 
 loadDependencies([
   "scene.js",
+  "anim.js",
   "plugger.js",
   "loadTag.js",
   "pipette/pipette.js",
