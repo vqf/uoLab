@@ -124,6 +124,10 @@ class plugger {
     this._add(this.parent, c);
   }
 
+  _getBoundingBox() {
+    return this.injected.getBBox();
+  }
+
   _dragData() {
     let result = {
       isDragging: false,
@@ -162,11 +166,14 @@ class plugger {
 
   rotate(angle, dur, x, y) {
     if (typeof x === "undefined") {
-      x = 0;
-      y = 0;
+      let bb = this._getBoundingBox();
+      x = bb.x + bb.width / 2;
+      y = bb.y + bb.height / 2;
     }
-    if (typeof dur !== undefined && dur !== undefined) {
+    if (typeof dur === "undefined" && dur === undefined) {
+      dur = 1;
     }
+    this.anim.angle.animRotate(angle, x, y, dur);
   }
 
   move(dx, dy, dur) {
@@ -254,6 +261,8 @@ class plugger {
     this.injected.transform.baseVal.appendItem(this.angle);
     this.injected.transform.baseVal.appendItem(this.resize);
     this.anim.pos = new anim(this.pos);
+    this.anim.angle = new anim(this.angle);
+    this.anim.scale = new anim(this.resize);
     this.scale(this.scaleCorrection, this.scaleCorrection);
   }
 
