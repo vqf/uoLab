@@ -42,6 +42,8 @@ class anim {
     this.fref(te);
     if (te < 1) {
       window.requestAnimationFrame(() => this._loop());
+    } else {
+      this.fref(1);
     }
   }
 }
