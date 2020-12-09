@@ -5,7 +5,7 @@ class anim {
     this.translate = all.getItem(0);
     this.rotate = all.getItem(1);
     this.resize = all.getItem(2);
-    this.ct = 0;
+    this.loop = {};
     this.target = {};
     this.lastValues = {};
   }
@@ -17,7 +17,8 @@ class anim {
     this.lastValues.x = this.translate.matrix.e;
     this.lastValues.y = this.translate.matrix.f;
     this.fref = this._Trefresh;
-    this._loop();
+    this.loop.translate = new _looper("t", this);
+    this.loop.translate._loop();
   }
   animRotate(angle, x, y, dur) {
     this.tdt = dur;
@@ -27,30 +28,45 @@ class anim {
     this.target.y = y - this.translate.matrix.f;
     this.lastValues.angle = this.rotate.angle;
     this.fref = this._Rrefresh;
-    this._loop();
+    this.loop.rotate = new _looper("r", this);
+    this.loop.rotate._loop();
+  }
+}
+
+class _looper {
+  constructor(type, info) {
+    this.type = type;
+    this.info = info;
+    this.ct = 0;
+    this.callback = null;
+    if (type === "t") {
+      this.callback = this._Trefresh;
+    } else if (type === "r") {
+      this.callback = this._Rrefresh;
+    }
   }
   _Trefresh(te) {
-    let tdx = te * this.target.x;
-    let tdy = te * this.target.y;
-    let sdx = tdx + this.lastValues.x;
-    let sdy = tdy + this.lastValues.y;
-    this.translate.setTranslate(sdx, sdy);
+    let tdx = te * this.info.target.x;
+    let tdy = te * this.info.target.y;
+    let sdx = tdx + this.info.lastValues.x;
+    let sdy = tdy + this.info.lastValues.y;
+    this.info.translate.setTranslate(sdx, sdy);
   }
   _Rrefresh(te) {
-    let ta = te * this.target.angle;
-    let ss = ta + this.lastValues.angle;
-    this.rotate.setRotate(ss, this.target.x, this.target.y);
+    let ta = te * this.info.target.angle;
+    let ss = ta + this.info.lastValues.angle;
+    this.info.rotate.setRotate(ss, this.info.target.x, this.info.target.y);
   }
   _loop() {
     let te = 1;
     if (this.tdt > 0) {
       te = (Date.now() - this.ct) / (1000 * this.tdt);
     }
-    this.fref(te);
+    this.callback(te);
     if (te < 1) {
       window.requestAnimationFrame(() => this._loop());
     } else {
-      this.fref(1);
+      this.callback(1);
     }
   }
 }
