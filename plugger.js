@@ -185,14 +185,14 @@ class plugger {
     if (typeof dur === "undefined" || dur === undefined) {
       dur = 1;
     }
-    this.anim.angle.animRotate(angle, x, y, dur);
+    this.anim.animRotate(angle, x, y, dur);
   }
 
   move(dx, dy, dur) {
     if (typeof dur === undefined || dur === undefined) {
       dur = 1;
     }
-    this.anim.pos.animTranslate(dx, dy, dur);
+    this.anim.animTranslate(dx, dy, dur);
   }
 
   scale(sx, sy) {
@@ -272,9 +272,7 @@ class plugger {
     this.injected.transform.baseVal.appendItem(this.pos);
     this.injected.transform.baseVal.appendItem(this.angle);
     this.injected.transform.baseVal.appendItem(this.resize);
-    this.anim.pos = new anim(this.pos);
-    this.anim.angle = new anim(this.angle);
-    this.anim.scale = new anim(this.resize);
+    this.anim = new anim(this.injected);
     this.scale(this.scaleCorrection, this.scaleCorrection);
   }
 
