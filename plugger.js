@@ -147,6 +147,14 @@ class plugger {
     return result;
   }
 
+  addEventListener(evt, f) {
+    let myself = this;
+    let onthefly = function(e) {
+      f(e, myself);
+    };
+    this.injected.addEventListener(evt, onthefly);
+  }
+
   getElementByLocalId(lid) {
     let id = lid + this.uid;
     let result = document.getElementById(id);
@@ -180,7 +188,7 @@ class plugger {
       let bb = this._getBoundingBox();
       x = bb.x + bb.width / 2;
       y = bb.y + bb.height / 2;
-      this._pointer(x, y);
+      //this._pointer(x, y);
     }
     if (typeof dur === "undefined" || dur === undefined) {
       dur = 1;

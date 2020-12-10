@@ -17,5 +17,10 @@ for (let i = 0; i < 20; i++) {
 let epp = new tube(sc);
 epp.inject(100, 100);
 epp.rotate(360, 1);
-epp.move(100, 0, 20);
+epp.move(100, 0, 2);
+epp.addEventListener("click", flip);
 if (DEBUG > 0) console.log("Experiment loaded");
+
+function flip(e, obj) {
+  obj.rotate(360, 2);
+}
