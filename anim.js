@@ -6,37 +6,36 @@ class anim {
     this.rotate = all.getItem(1);
     this.resize = all.getItem(2);
     this.loop = {};
-    this.target = {};
-    this.lastValues = {};
   }
   animTranslate(dx, dy, dur) {
-    this.tdt = dur;
-    this.ct = Date.now();
-    this.target.x = dx;
-    this.target.y = dy;
-    this.lastValues.x = this.translate.matrix.e;
-    this.lastValues.y = this.translate.matrix.f;
-    this.fref = this._Trefresh;
-    this.loop.translate = new _looper("t", this);
-    this.loop.translate._loop();
+    let current = {};
+    let target = {};
+    target.x = dx;
+    target.y = dy;
+    current.x = this.translate.matrix.e;
+    current.y = this.translate.matrix.f;
+    this.loop.translate = new _looper("t", this, dur, current, target);
+    this.loop.translate.loop();
   }
   animRotate(angle, x, y, dur) {
-    this.tdt = dur;
-    this.ct = Date.now();
-    this.target.angle = angle;
-    this.target.x = x - this.translate.matrix.e;
-    this.target.y = y - this.translate.matrix.f;
-    this.lastValues.angle = this.rotate.angle;
-    this.fref = this._Rrefresh;
-    this.loop.rotate = new _looper("r", this);
-    this.loop.rotate._loop();
+    let current = {};
+    let target = {};
+    target.angle = angle;
+    target.x = x - this.translate.matrix.e;
+    target.y = y - this.translate.matrix.f;
+    current.angle = this.rotate.angle;
+    this.loop.rotate = new _looper("r", this, dur, current, target);
+    this.loop.rotate.loop();
   }
 }
 
 class _looper {
-  constructor(type, info) {
+  constructor(type, info, dur, current, target) {
     this.type = type;
     this.info = info;
+    this.tdt = dur;
+    this.current = current;
+    this.target = target;
     this.ct = 0;
     this.callback = null;
     if (type === "t") {
@@ -46,16 +45,20 @@ class _looper {
     }
   }
   _Trefresh(te) {
-    let tdx = te * this.info.target.x;
-    let tdy = te * this.info.target.y;
-    let sdx = tdx + this.info.lastValues.x;
-    let sdy = tdy + this.info.lastValues.y;
+    let tdx = te * this.target.x;
+    let tdy = te * this.target.y;
+    let sdx = tdx + this.current.x;
+    let sdy = tdy + this.current.y;
     this.info.translate.setTranslate(sdx, sdy);
   }
   _Rrefresh(te) {
-    let ta = te * this.info.target.angle;
-    let ss = ta + this.info.lastValues.angle;
-    this.info.rotate.setRotate(ss, this.info.target.x, this.info.target.y);
+    let ta = te * this.target.angle;
+    let ss = ta + this.current.angle;
+    this.info.rotate.setRotate(ss, this.target.x, this.target.y);
+  }
+  loop() {
+    this.ct = Date.now();
+    this._loop();
   }
   _loop() {
     let te = 1;
