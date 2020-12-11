@@ -15,7 +15,12 @@ class anim {
     target.y = dy;
     current.x = this.translate.matrix.e;
     current.y = this.translate.matrix.f;
-    this.loop.translate = new _looper();
+    debugger;
+    if (this.queue) {
+      this.queue = false;
+    } else {
+      this.loop.translate = new _looper();
+    }
     this.loop.translate.loop("t", this, dur, current, target);
     return this.loop.translate;
   }
@@ -30,7 +35,9 @@ class anim {
     target.x = x - this.translate.matrix.e;
     target.y = y - this.translate.matrix.f;
     current.angle = this.rotate.angle;
-    if (!this.queue) {
+    if (this.queue) {
+      this.queue = false;
+    } else {
       this.loop.rotate = new _looper();
     }
     this.loop.rotate.loop("r", this, dur, current, target);
@@ -56,22 +63,22 @@ class _looper {
     this.info.rotate.setRotate(ss, this.target.x, this.target.y);
   }
   loop(type, info, dur, current, target) {
-    this.type = type;
-    this.info = info;
-    this.tdt = dur;
-    this.current = current;
-    this.target = target;
-    this.ct = 0;
-    this.callback = null;
-    if (type === "t") {
-      this.callback = this._Trefresh;
-    } else if (type === "r") {
-      this.callback = this._Rrefresh;
-    }
-    this.ct = Date.now();
     if (this.busy) {
       this.queue.push([type, info, dur, current, target]);
     } else {
+      this.type = type;
+      this.info = info;
+      this.tdt = dur;
+      this.current = current;
+      this.target = target;
+      this.ct = 0;
+      this.callback = null;
+      if (type === "t") {
+        this.callback = this._Trefresh;
+      } else if (type === "r") {
+        this.callback = this._Rrefresh;
+      }
+      this.ct = Date.now();
       this.busy = true;
       this._loop();
     }
