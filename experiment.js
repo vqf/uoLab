@@ -19,7 +19,9 @@ epp.inject(100, 100);
 epp
   .rotate(90, 1)
   .then()
-  .rotate(-360, 1);
+  .rotate(-360, 1)
+  .then()
+  .move(-50, 0, 1);
 epp.move(100, 0, 2);
 epp.addEventListener("click", flip);
 if (DEBUG > 0) console.log("Experiment loaded");

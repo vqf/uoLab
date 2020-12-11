@@ -1,5 +1,20 @@
 let DEBUG = 0;
 
+class trace {
+  constructor() {
+    this.msgs = [];
+    this.counter = 0;
+    this.trace = false;
+  }
+  log(msg) {
+    this.msgs.push(msg);
+    if (this.trace) {
+      console.log(this.msgs[this.counter]);
+      this.counter++;
+    }
+  }
+}
+
 let logger = new Event("log");
 document.addEventListener("log", function(e) {
   console.log(e.custom);
