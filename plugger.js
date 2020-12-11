@@ -183,6 +183,11 @@ class plugger {
     this.parent.appendChild(d);
   }
 
+  then() {
+    this.anim.then();
+    return this;
+  }
+
   rotate(angle, dur, x, y) {
     if (typeof x === "undefined") {
       let bb = this._getBoundingBox();
@@ -194,6 +199,7 @@ class plugger {
       dur = 1;
     }
     this.anim.animRotate(angle, x, y, dur);
+    return this;
   }
 
   move(dx, dy, dur) {
@@ -201,6 +207,7 @@ class plugger {
       dur = 1;
     }
     this.anim.animTranslate(dx, dy, dur);
+    return this;
   }
 
   scale(sx, sy) {
