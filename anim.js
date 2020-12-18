@@ -35,7 +35,7 @@ class anim {
       this.loop = new _looper();
     }
     this.loop.loop("r", this, dur, target);
-    return this.loop.rotate;
+    return this.loop;
   }
 }
 
