@@ -6,11 +6,7 @@ class anim {
     this.rotate = all.getItem(1);
     this.resize = all.getItem(2);
     this.queue = false;
-    this.loop = {
-      translate: new _looper(),
-      rotate: new _looper(),
-      scale: new _looper()
-    };
+    this.loop = new _looper();
   }
   animTranslate(dx, dy, dur) {
     let target = {};
@@ -19,10 +15,10 @@ class anim {
     if (this.queue) {
       this.queue = false;
     } else {
-      this.loop.translate = new _looper();
+      this.loop = new _looper();
     }
-    this.loop.translate.loop("t", this, dur, target);
-    return this.loop.translate;
+    this.loop.loop("t", this, dur, target);
+    return this.loop;
   }
   then() {
     this.queue = true;
@@ -36,9 +32,9 @@ class anim {
     if (this.queue) {
       this.queue = false;
     } else {
-      this.loop.rotate = new _looper();
+      this.loop = new _looper();
     }
-    this.loop.rotate.loop("r", this, dur, target);
+    this.loop.loop("r", this, dur, target);
     return this.loop.rotate;
   }
 }
