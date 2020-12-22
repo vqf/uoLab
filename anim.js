@@ -12,7 +12,7 @@ class anim {
     let target = {};
     target.x = dx;
     target.y = dy;
-    if (this.queue) {
+    if (this.queue === true) {
       this.queue = false;
     } else {
       this.loop = new _looper();
@@ -29,7 +29,7 @@ class anim {
     target.angle = angle;
     target.x = x - this.translate.matrix.e;
     target.y = y - this.translate.matrix.f;
-    if (this.queue) {
+    if (this.queue === true) {
       this.queue = false;
     } else {
       this.loop = new _looper();
@@ -57,7 +57,7 @@ class _looper {
     this.info.rotate.setRotate(ss, this.target.x, this.target.y);
   }
   loop(type, info, dur, target) {
-    if (this.busy) {
+    if (this.busy === true) {
       this.queue.push([type, info, dur, target]);
     } else {
       this.type = type;
