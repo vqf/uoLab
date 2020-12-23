@@ -16,15 +16,15 @@ for (let i = 0; i < 20; i++) {
 
 let epp = new tube(sc);
 epp.inject(100, 100);
-epp
-  .rotate(90, 1)
-  .then()
-  .rotate(-90, 1);
+[epp, pipette1].forEach(o => {
+  o.rotate(90, 1)
+    .then()
+    .rotate(-90, 1);
 
-epp
-  .move(100, 0, 2)
-  .then()
-  .move(-50, 0, 1);
+  o.move(100, 0, 2)
+    .then()
+    .move(-50, 0, 1);
+});
 if (DEBUG > 0) console.log("Experiment loaded");
 
 //epp.addEventListener("click", flip);
