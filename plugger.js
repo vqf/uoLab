@@ -189,12 +189,14 @@ class plugger {
   }
 
   rotate(angle, dur, x, y) {
+    let bb = this._getBoundingBox();
     if (typeof x === "undefined") {
-      let bb = this._getBoundingBox();
-      x = bb.x + bb.width / 2;
-      y = bb.y + bb.height / 2;
+      x = bb.width / 2;
+      y = bb.height / 2;
       //this._pointer(x, y);
     }
+    x += bb.x;
+    y += bb.y;
     if (typeof dur === "undefined" || dur === undefined) {
       dur = 1;
     }

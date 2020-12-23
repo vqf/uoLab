@@ -105,6 +105,7 @@ class pipette extends plugger {
   constructor(parent) {
     let mp = loadSVGTag(pipette_code);
     super(parent, mp, pipette_behavior);
+    this.scaleCorrection = 2;
   }
   inject(x, y) {
     super.inject(x, y);
@@ -117,6 +118,7 @@ class yellowTip extends plugger {
   constructor(parent) {
     let tp = loadSVGTag(yellow_tip);
     super(parent, tp, tip_behavior);
+    this.scaleCorrection = 2;
   }
   inject(x, y) {
     super.inject(x, y);
