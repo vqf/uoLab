@@ -17,9 +17,9 @@ for (let i = 0; i < 20; i++) {
 let epp = new tube(sc);
 epp.inject(100, 100);
 [epp, pipette1].forEach(o => {
-  o.rotate(90, 1)
+  o.rotate(45, 1)
     .then()
-    .rotate(-90, 1);
+    .rotate(-45, 1);
 
   o.move(100, 0, 2)
     .then()
