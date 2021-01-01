@@ -68,6 +68,7 @@ class plugger {
     this.pos = this.parent.createSVGTransform();
     this.angle = this.parent.createSVGTransform();
     this.resize = this.parent.createSVGTransform();
+    this.injected = null;
     this.anim = {};
     this.pt = this.parent.createSVGPoint();
     this.drag = this._dragData();
@@ -162,6 +163,8 @@ class plugger {
   }
 
   setPos(x, y) {
+    x = _def(x);
+    y = _def(y);
     this.pos.setTranslate(x, y);
   }
   setAngle(a, x, y) {
@@ -296,10 +299,12 @@ class plugger {
   inject(x, y) {
     x = _def(x);
     y = _def(y);
-    this._shadow();
-    this.injected = this.parent.appendChild(this.obj);
-    this.injected.classList.add(this._mine("g"));
-    this._initInjected();
+    if (this.injected === null) {
+      this._shadow();
+      this.injected = this.parent.appendChild(this.obj);
+      this.injected.classList.add(this._mine("g"));
+      this._initInjected();
+    }
     this.setPos(x, y);
     this._scripts(this.jscode);
   }

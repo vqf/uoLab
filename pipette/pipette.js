@@ -102,9 +102,10 @@ function pipette_behavior() {
 function tip_behavior() {}
 
 class pipette extends plugger {
-  constructor(parent) {
+  constructor(parent, x, y) {
     let mp = loadSVGTag(pipette_code);
     super(parent, mp, pipette_behavior);
+    this.setPos(x, y);
     this.scaleCorrection = 2;
   }
   inject(x, y) {

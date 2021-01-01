@@ -11,6 +11,10 @@ class scene {
     window.addEventListener("resize", onthefly);
   }
 
+  add(object_name, x, y){
+    
+  }
+
   _initBoxes(evt, myself) {
     myself.w = myself.svg.getBoundingClientRect().width;
     myself.h = myself.svg.getBoundingClientRect().height;
