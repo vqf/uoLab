@@ -1,11 +1,12 @@
 let scr = document.getElementById("screen");
 let sc = new scene(scr);
 sc._showGrid();
-sc._showBox(2, 2);
+//sc._showBox(2, 2);
 let pipette1 = new pipette(sc);
 pipette1.inject(100, 100);
 //pipette1.scale(2, 2);
 
+let pipette2 = sc.add("pipette", 300, 100);
 let tips = [];
 for (let i = 0; i < 20; i++) {
   let newtip = new yellowTip(sc);

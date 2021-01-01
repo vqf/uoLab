@@ -56,7 +56,10 @@ class plugger {
   constructor(parent, obj, jscode, style) {
     this.parent = parent;
     this.publicuid = "amnfabenfo";
+    this.scene = null;
     if (parent instanceof scene) {
+      this.scene = parent;
+      this.scene._add(this);
       this.parent = parent.getSvg();
     }
     this.obj = _def(obj);
@@ -72,6 +75,10 @@ class plugger {
     this.anim = {};
     this.pt = this.parent.createSVGPoint();
     this.drag = this._dragData();
+  }
+
+  _uid() {
+    return this._uid;
   }
 
   _add(where, el) {

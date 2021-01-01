@@ -2,20 +2,48 @@ class scene {
   constructor(svg) {
     this.svg = svg;
     this.lognBoxes = 6; // 64 boxes
+    this.objects = [];
     let myself = this;
-    this._initBoxes(null, myself);
+    this._initBoxes(myself);
+    this._initTranslator();
     let f = this._initBoxes;
     let onthefly = function(evt) {
-      f(evt, myself);
+      f(myself);
     };
     window.addEventListener("resize", onthefly);
   }
 
-  add(object_name, x, y){
+  _add(obj) {
+    this.objects.push(obj);
+  }
+
+  _calcSpace(obj){
     
   }
 
-  _initBoxes(evt, myself) {
+  add(object_name, x, y) {
+    let obj = this.sceneObjects[object_name](x, y);
+    obj.inject(x, y);
+    this._add(obj);
+    return obj;
+  }
+
+  _initTranslator() {
+    let myself = this;
+    this.sceneObjects = {
+      pipette: function(x, y) {
+        return new pipette(myself, x, y);
+      },
+      tip: function() {
+        return new tip(myself, x, y);
+      },
+      tube: function() {
+        return new tube(myself, x, y);
+      }
+    };
+  }
+
+  _initBoxes(myself) {
     myself.w = myself.svg.getBoundingClientRect().width;
     myself.h = myself.svg.getBoundingClientRect().height;
     let nboxes = 1 << myself.lognBoxes;
