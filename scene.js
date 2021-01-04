@@ -6,6 +6,7 @@ class scene {
     this.nboxes = 1 << this.lognBoxes;
     this.objects = [];
     this.localizers = {};
+    this.grid = [];
     let myself = this;
     this._initBoxes(myself);
     this._initTranslator();
@@ -24,13 +25,16 @@ class scene {
 
   _calcSpace(obj) {
     let bb = obj.getBoundingBox();
+    let uid = obj._uid();
     let nstx = Math.floor(bb.x / this.box.x);
     let nndx = Math.floor((bb.x + bb.width) / this.box.x);
     let nsty = Math.floor(bb.y / this.box.y);
     let nndy = Math.floor((bb.y + bb.height) / this.box.y);
     for (let i = nstx; i <= nndx; i++) {
       for (let j = nsty; j <= nndy; j++) {
-        this._showBox(i, j);
+        if (DEBUG_GRID === true) {
+          this._showBox(i, j);
+        }
       }
     }
   }
@@ -77,7 +81,7 @@ class scene {
   /* DEBUG */
   _showBox(nx, ny) {
     let x0 = nx * this.box.x;
-    let y0 = nx * this.box.y;
+    let y0 = ny * this.box.y;
     let r = loadSVGTag({
       tag: "rect",
       class: "debugBox",
