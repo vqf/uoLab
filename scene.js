@@ -1,7 +1,9 @@
+let DEBUG_GRID = true;
 class scene {
   constructor(svg) {
     this.svg = svg;
     this.lognBoxes = 6; // 64 boxes
+    this.nboxes = 1 << this.lognBoxes;
     this.objects = [];
     this.localizers = {};
     let myself = this;
@@ -22,7 +24,15 @@ class scene {
 
   _calcSpace(obj) {
     let bb = obj.getBoundingBox();
-    console.log(bb);
+    let nstx = Math.floor(bb.x / this.box.x);
+    let nndx = Math.floor((bb.x + bb.width) / this.box.x);
+    let nsty = Math.floor(bb.y / this.box.y);
+    let nndy = Math.floor((bb.y + bb.height) / this.box.y);
+    for (let i = nstx; i <= nndx; i++) {
+      for (let j = nsty; j <= nndy; j++) {
+        this._showBox(i, j);
+      }
+    }
   }
 
   add(object_name, x, y) {
@@ -38,10 +48,10 @@ class scene {
       pipette: function(x, y) {
         return new pipette(myself, x, y);
       },
-      tip: function() {
+      tip: function(x, y) {
         return new tip(myself, x, y);
       },
-      tube: function() {
+      tube: function(x, y) {
         return new tube(myself, x, y);
       }
     };
@@ -50,13 +60,15 @@ class scene {
   _initBoxes(myself) {
     myself.w = myself.svg.getBoundingClientRect().width;
     myself.h = myself.svg.getBoundingClientRect().height;
-    let nboxes = 1 << myself.lognBoxes;
+    let nboxes = myself.nboxes;
     myself.box = {
       x: myself.w / nboxes,
       y: myself.h / nboxes
     };
-    //myself._hideGrid();
-    //myself._showGrid();
+    if (DEBUG_GRID === true) {
+      myself._hideGrid();
+      myself._showGrid();
+    }
   }
   getSvg() {
     return this.svg;

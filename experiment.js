@@ -1,6 +1,6 @@
 let scr = document.getElementById("screen");
 let sc = new scene(scr);
-sc._showGrid();
+//sc._showGrid();
 //sc._showBox(2, 2);
 let pipette1 = new pipette(sc);
 pipette1.inject(100, 100);
