@@ -124,7 +124,6 @@ class yellowTip extends plugger {
   inject(x, y) {
     super.inject(x, y);
     let bod = this.getElementByLocalId("ytip");
-
     this.makeDraggable(bod);
   }
 }

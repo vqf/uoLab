@@ -77,7 +77,7 @@ class plugger {
   }
 
   _uid() {
-    return this._uid;
+    return this.uid;
   }
 
   _add(where, el) {
@@ -313,7 +313,7 @@ class plugger {
     }
     this.setPos(x, y);
     this._scripts(this.jscode);
-    if (this.scene !== null) {
+    if (this.scene instanceof scene) {
       this.scene._add(this);
     }
   }

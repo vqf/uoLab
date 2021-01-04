@@ -6,7 +6,8 @@ class scene {
     this.nboxes = 1 << this.lognBoxes;
     this.objects = [];
     this.localizers = {};
-    this.grid = [];
+    this.sqares = {};
+    this._startGrid();
     let myself = this;
     this._initBoxes(myself);
     this._initTranslator();
@@ -17,9 +18,22 @@ class scene {
     window.addEventListener("resize", onthefly);
   }
 
+  _startGrid() {
+    this.grid = [];
+    for (let i = 0; i <= this.nboxes; i++) {
+      this.grid[i] = [];
+    }
+    for (let i = 0; i <= this.nboxes; i++) {
+      for (let j = 0; j <= this.nboxes; j++) {
+        this.grid[i][j] = {};
+      }
+    }
+  }
   _add(obj) {
     this.objects.push(obj);
-    this.localizers[obj._uid()] = obj;
+    let uid = obj._uid();
+    this.localizers[uid] = obj;
+    this.sqares[uid] = [];
     this._calcSpace(obj);
   }
 
@@ -32,6 +46,8 @@ class scene {
     let nndy = Math.floor((bb.y + bb.height) / this.box.y);
     for (let i = nstx; i <= nndx; i++) {
       for (let j = nsty; j <= nndy; j++) {
+        this.sqares[uid].push([i, j]);
+        this.grid[i][j][uid] = true;
         if (DEBUG_GRID === true) {
           this._showBox(i, j);
         }
