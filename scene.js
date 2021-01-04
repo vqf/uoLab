@@ -17,10 +17,12 @@ class scene {
   _add(obj) {
     this.objects.push(obj);
     this.localizers[obj._uid()] = obj;
+    this._calcSpace(obj);
   }
 
   _calcSpace(obj) {
     let bb = obj.getBoundingBox();
+    console.log(bb);
   }
 
   add(object_name, x, y) {

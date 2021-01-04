@@ -59,7 +59,6 @@ class plugger {
     this.scene = null;
     if (parent instanceof scene) {
       this.scene = parent;
-      this.scene._add(this);
       this.parent = parent.getSvg();
     }
     this.obj = _def(obj);
@@ -314,6 +313,9 @@ class plugger {
     }
     this.setPos(x, y);
     this._scripts(this.jscode);
+    if (this.scene !== null) {
+      this.scene._add(this);
+    }
   }
   _scripts(sc) {
     let sid = "script" + this.uid;
