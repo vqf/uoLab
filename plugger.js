@@ -132,7 +132,7 @@ class plugger {
     this._add(this.parent, c);
   }
 
-  _getBoundingBox() {
+  getBoundingBox() {
     return this.injected.getBoundingClientRect();
   }
 
@@ -199,7 +199,7 @@ class plugger {
   }
 
   rotate(angle, dur, x, y) {
-    let bb = this._getBoundingBox();
+    let bb = this.getBoundingBox();
     if (typeof x === "undefined") {
       x = bb.width / 2;
       y = bb.height / 2;

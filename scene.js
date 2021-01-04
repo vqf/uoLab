@@ -3,6 +3,7 @@ class scene {
     this.svg = svg;
     this.lognBoxes = 6; // 64 boxes
     this.objects = [];
+    this.localizers = {};
     let myself = this;
     this._initBoxes(myself);
     this._initTranslator();
@@ -15,10 +16,11 @@ class scene {
 
   _add(obj) {
     this.objects.push(obj);
+    this.localizers[obj._uid()] = obj;
   }
 
-  _calcSpace(obj){
-    
+  _calcSpace(obj) {
+    let bb = obj.getBoundingBox();
   }
 
   add(object_name, x, y) {
