@@ -298,12 +298,18 @@ class plugger {
     this.injected.transform.baseVal.appendItem(this.pos);
     this.injected.transform.baseVal.appendItem(this.angle);
     this.injected.transform.baseVal.appendItem(this.resize);
-    this.anim = new anim(this.injected);
+    let myself = this;
+    this.anim = new anim(myself);
     this.scale(this.scaleCorrection, this.scaleCorrection);
   }
 
   getMessage(msg) {
     if (msg === "hasMoved") {
+      if (this.scene instanceof scene) {
+        let myself = this;
+        this.scene._clearObjectGrid(myself);
+        this.scene._calcSpace(myself);
+      }
     }
   }
 

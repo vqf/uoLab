@@ -6,10 +6,10 @@ class scene {
     this.nboxes = 1 << this.lognBoxes;
     this.objects = [];
     this.localizers = {};
-    this.sqares = {};
+    this.squares = {};
     this._startGrid();
     let myself = this;
-    this._initBoxes(myself);
+    this._initBoxes();
     this._initTranslator();
     let f = this._initBoxes;
     let onthefly = function(evt) {
@@ -33,14 +33,18 @@ class scene {
     this.objects.push(obj);
     let uid = obj._uid();
     this.localizers[uid] = obj;
-    this.sqares[uid] = [];
+    this.squares[uid] = [];
     this._calcSpace(obj);
   }
 
   _clearObjectGrid(obj) {
     let uid = obj._uid();
-    this.sqares[uid].forEach(p => {
-      delete this.grid[p[0]][p[1]][uid];
+    this.squares[uid].forEach(p => {
+      if (typeof this.grid[p[0]][p[1]][uid] !== undefined) {
+        delete this.grid[p[0]][p[1]][uid];
+      } else {
+        debugger;
+      }
       if (DEBUG_GRID === true) {
         this._hideBox(p[0], p[1]);
       }
@@ -55,9 +59,15 @@ class scene {
     let nndx = Math.floor((bb.x + bb.width) / this.box.x);
     let nsty = Math.floor(bb.y / this.box.y);
     let nndy = Math.floor((bb.y + bb.height) / this.box.y);
+    if (nndx > this.nboxes) {
+      nndx = this.nboxes;
+    }
+    if (nndy > this.nboxes) {
+      nndy = this.nboxes;
+    }
     for (let i = nstx; i <= nndx; i++) {
       for (let j = nsty; j <= nndy; j++) {
-        this.sqares[uid].push([i, j]);
+        this.squares[uid].push([i, j]);
         this.grid[i][j][uid] = true;
         if (DEBUG_GRID === true) {
           this._showBox(i, j);
@@ -88,17 +98,17 @@ class scene {
     };
   }
 
-  _initBoxes(myself) {
-    myself.w = myself.svg.getBoundingClientRect().width;
-    myself.h = myself.svg.getBoundingClientRect().height;
-    let nboxes = myself.nboxes;
-    myself.box = {
-      x: myself.w / nboxes,
-      y: myself.h / nboxes
+  _initBoxes() {
+    this.w = this.svg.getBoundingClientRect().width;
+    this.h = this.svg.getBoundingClientRect().height;
+    let nboxes = this.nboxes;
+    this.box = {
+      x: this.w / nboxes,
+      y: this.h / nboxes
     };
     if (DEBUG_GRID === true) {
-      myself._hideGrid();
-      myself._showGrid();
+      this._hideGrid();
+      this._showGrid();
     }
   }
   getSvg() {
