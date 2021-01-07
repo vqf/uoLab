@@ -302,6 +302,11 @@ class plugger {
     this.scale(this.scaleCorrection, this.scaleCorrection);
   }
 
+  getMessage(msg) {
+    if (msg === "hasMoved") {
+    }
+  }
+
   inject(x, y) {
     x = _def(x);
     y = _def(y);

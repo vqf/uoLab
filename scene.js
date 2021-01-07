@@ -37,6 +37,17 @@ class scene {
     this._calcSpace(obj);
   }
 
+  _clearObjectGrid(obj) {
+    let uid = obj._uid();
+    this.sqares[uid].forEach(p => {
+      delete this.grid[p[0]][p[1]][uid];
+      if (DEBUG_GRID === true) {
+        this._hideBox(p[0], p[1]);
+      }
+    });
+    this.squares[uid] = [];
+  }
+
   _calcSpace(obj) {
     let bb = obj.getBoundingBox();
     let uid = obj._uid();
@@ -98,7 +109,9 @@ class scene {
   _showBox(nx, ny) {
     let x0 = nx * this.box.x;
     let y0 = ny * this.box.y;
+    let uid = "r_" + nx + "_" + ny;
     let r = loadSVGTag({
+      id: uid,
       tag: "rect",
       class: "debugBox",
       x: x0,
@@ -108,6 +121,15 @@ class scene {
     });
     this.svg.insertBefore(r, this.svg.firstChild);
   }
+
+  _hideBox(nx, ny) {
+    let uid = "r_" + nx + "_" + ny;
+    let g = document.getElementById(uid);
+    if (g !== null) {
+      g.parentElement.removeChild(g);
+    }
+  }
+
   _hideGrid() {
     let g = document.getElementById("grid");
     if (g !== null) {
