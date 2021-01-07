@@ -42,8 +42,6 @@ class scene {
     this.squares[uid].forEach(p => {
       if (typeof this.grid[p[0]][p[1]][uid] !== undefined) {
         delete this.grid[p[0]][p[1]][uid];
-      } else {
-        debugger;
       }
       if (DEBUG_GRID === true) {
         this._hideBox(p[0], p[1]);

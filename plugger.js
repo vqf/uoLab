@@ -264,6 +264,7 @@ class plugger {
     const dx = pt[0] - this.drag.from.dx;
     const dy = pt[1] - this.drag.from.dy;
     this.setPos(dx, dy);
+    this.getMessage("hasMoved");
   }
 
   makeDraggable(obj) {
@@ -301,6 +302,10 @@ class plugger {
     let myself = this;
     this.anim = new anim(myself);
     this.scale(this.scaleCorrection, this.scaleCorrection);
+  }
+
+  getInjected() {
+    return this.injected;
   }
 
   getMessage(msg) {

@@ -1,7 +1,7 @@
 class anim {
   constructor(transf) {
     this.parent = transf;
-    this.obj = transf.injected;
+    this.obj = transf.getInjected();
     let all = this.obj.transform.baseVal;
     this.translate = all.getItem(0);
     this.rotate = all.getItem(1);
@@ -92,11 +92,11 @@ class _looper {
     } else {
       this.callback(1);
       this.busy = false;
-      this.info.parent.getMessage("hasMoved");
       if (this.queue.length > 0) {
         let opts = this.queue.shift();
         this.loop(opts[0], opts[1], opts[2], opts[3]);
       }
+      this.info.parent.getMessage("hasMoved");
     }
   }
 }
