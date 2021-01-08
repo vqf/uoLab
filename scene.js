@@ -1,4 +1,16 @@
 let DEBUG_GRID = true;
+
+function inRange(v, min, max) {
+  let result = v;
+  if (v < min) {
+    result = min;
+  }
+  if (v > max) {
+    result = max;
+  }
+  return result;
+}
+
 class scene {
   constructor(svg) {
     this.svg = svg;
@@ -53,16 +65,18 @@ class scene {
   _calcSpace(obj) {
     let bb = obj.getBoundingBox();
     let uid = obj._uid();
-    let nstx = Math.floor(bb.x / this.box.x);
-    let nndx = Math.floor((bb.x + bb.width) / this.box.x);
-    let nsty = Math.floor(bb.y / this.box.y);
-    let nndy = Math.floor((bb.y + bb.height) / this.box.y);
-    if (nndx > this.nboxes) {
-      nndx = this.nboxes;
-    }
-    if (nndy > this.nboxes) {
-      nndy = this.nboxes;
-    }
+    let nstx = inRange(Math.floor(bb.x / this.box.x), 0, this.nboxes);
+    let nndx = inRange(
+      Math.floor((bb.x + bb.width) / this.box.x),
+      0,
+      this.nboxes
+    );
+    let nsty = inRange(Math.floor(bb.y / this.box.y), 0, this.nboxes);
+    let nndy = inRange(
+      Math.floor((bb.y + bb.height) / this.box.y),
+      0,
+      this.nboxes
+    );
     for (let i = nstx; i <= nndx; i++) {
       for (let j = nsty; j <= nndy; j++) {
         this.squares[uid].push([i, j]);
