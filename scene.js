@@ -62,23 +62,29 @@ class scene {
     this.squares[uid] = [];
   }
 
-  _calcSpace(obj) {
-    let bb = obj.getBoundingBox();
-    let uid = obj._uid();
-    let nstx = inRange(Math.floor(bb.x / this.box.x), 0, this.nboxes);
-    let nndx = inRange(
+  _getBoxes(bb) {
+    let result = [];
+    result.nstx = inRange(Math.floor(bb.x / this.box.x), 0, this.nboxes);
+    result.nndx = inRange(
       Math.floor((bb.x + bb.width) / this.box.x),
       0,
       this.nboxes
     );
-    let nsty = inRange(Math.floor(bb.y / this.box.y), 0, this.nboxes);
-    let nndy = inRange(
+    result.nsty = inRange(Math.floor(bb.y / this.box.y), 0, this.nboxes);
+    result.nndy = inRange(
       Math.floor((bb.y + bb.height) / this.box.y),
       0,
       this.nboxes
     );
-    for (let i = nstx; i <= nndx; i++) {
-      for (let j = nsty; j <= nndy; j++) {
+    return result;
+  }
+
+  _calcSpace(obj) {
+    let bb = obj.getBoundingBox();
+    let uid = obj._uid();
+    let boxes = this._getBoxes(bb);
+    for (let i = boxes.nstx; i <= boxes.nndx; i++) {
+      for (let j = boxes.nsty; j <= boxes.nndy; j++) {
         this.squares[uid].push([i, j]);
         this.grid[i][j][uid] = true;
         if (DEBUG_GRID === true) {
@@ -93,6 +99,36 @@ class scene {
     obj.inject(x, y);
     this._add(obj);
     return obj;
+  }
+
+  closest(obj, surround, partid) {
+    let sur = _def(surround, 1);
+    let result = null;
+    let bbox = obj.getBoundingBox();
+    if (typeof partid !== undefined) {
+      let uid = document.getElementById(partid + this.uid);
+      bbox = uid.getBoundingBox();
+    }
+    let b = this._getBoxes(bbox);
+    let o = [];
+    let stx = inRange(b.nstx - sur, 0, this.nboxes);
+    let ndx = inRange(b.nndx + sur, 0, this.nboxes);
+    let sty = inRange(b.nsty - sur, 0, this.nboxes);
+    let ndy = inRange(b.nndy + sur, 0, this.nboxes);
+    for (let i = stx; i <= ndx; i++) {
+      for (let j = sty; j <= ndy; j++) {
+        let k = this.grid[i][j].keys();
+        if (k.length > 0) {
+          k.forEach(x => {
+            o.push(x);
+          });
+        }
+      }
+    }
+    console.log(o);
+    let cx = bbox.x + bbox.width / 2;
+    let cy = bbox.y + bbox.height / 2;
+    return result;
   }
 
   _initTranslator() {
@@ -110,17 +146,18 @@ class scene {
     };
   }
 
-  _initBoxes() {
-    this.w = this.svg.getBoundingClientRect().width;
-    this.h = this.svg.getBoundingClientRect().height;
-    let nboxes = this.nboxes;
-    this.box = {
-      x: this.w / nboxes,
-      y: this.h / nboxes
+  _initBoxes(meself) {
+    let myself = _def(this, meself);
+    myself.w = myself.svg.getBoundingClientRect().width;
+    myself.h = myself.svg.getBoundingClientRect().height;
+    let nboxes = myself.nboxes;
+    myself.box = {
+      x: myself.w / nboxes,
+      y: myself.h / nboxes
     };
     if (DEBUG_GRID === true) {
-      this._hideGrid();
-      this._showGrid();
+      myself._hideGrid();
+      myself._showGrid();
     }
   }
   getSvg() {
