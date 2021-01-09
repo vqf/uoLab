@@ -103,9 +103,10 @@ class scene {
 
   closest(obj, surround, partid) {
     let sur = _def(surround, 1);
+    let puid = obj._uid();
     let result = null;
     let bbox = obj.getBoundingBox();
-    if (typeof partid !== undefined) {
+    if (typeof partid !== "undefined") {
       let uid = document.getElementById(partid + this.uid);
       bbox = uid.getBoundingBox();
     }
@@ -117,15 +118,16 @@ class scene {
     let ndy = inRange(b.nndy + sur, 0, this.nboxes);
     for (let i = stx; i <= ndx; i++) {
       for (let j = sty; j <= ndy; j++) {
-        let k = this.grid[i][j].keys();
+        let k = Object.keys(this.grid[i][j]);
         if (k.length > 0) {
           k.forEach(x => {
-            o.push(x);
+            if (x !== puid) {
+              o[x] = true;
+            }
           });
         }
       }
     }
-    console.log(o);
     let cx = bbox.x + bbox.width / 2;
     let cy = bbox.y + bbox.height / 2;
     return result;

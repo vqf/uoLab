@@ -113,6 +113,12 @@ class pipette extends plugger {
     let bod = this.getElementByLocalId("pipette_body");
     this.makeDraggable(bod);
   }
+  getMessage(msg) {
+    super.getMessage(msg);
+    if (msg === "hasMoved") {
+      this.closest = this.scene.closest(this);
+    }
+  }
 }
 
 class yellowTip extends plugger {
