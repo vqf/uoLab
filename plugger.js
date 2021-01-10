@@ -66,6 +66,7 @@ class plugger {
     this.style = _def(style);
     this.uid = _uid();
     this._hoverfilter();
+    this.closest = null;
     this.scaleCorrection = 1;
     this.pos = this.parent.createSVGTransform();
     this.angle = this.parent.createSVGTransform();
@@ -103,12 +104,19 @@ class plugger {
     return n + this.publicuid;
   }
 
+  highlightOn() {
+    this.injected.classList.add(`${this._mine("high")}`);
+  }
+  highlightOff() {
+    this.injected.classList.remove(`${this._mine("high")}`);
+  }
+
   _hoverfilter() {
     let s = {
       tag: "style",
       id: this._mine("st"),
       content: `
-        .${this._mine("g")}:hover{
+        .${this._mine("g")}:hover, .${this._mine("high")}{
           filter: url("#${this._mine("blur")}")
         }
       `

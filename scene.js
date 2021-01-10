@@ -1,4 +1,5 @@
-let DEBUG_GRID = true;
+let DEBUG_GRID = false;
+let DEBUG_PROXIMITY = false;
 
 function inRange(v, min, max) {
   let result = v;
@@ -107,8 +108,8 @@ class scene {
     let result = null;
     let bbox = obj.getBoundingBox();
     if (typeof partid !== "undefined") {
-      let uid = document.getElementById(partid + this.uid);
-      bbox = uid.getBoundingBox();
+      let uid = document.getElementById(partid + obj._uid());
+      bbox = uid.getBoundingClientRect();
     }
     let b = this._getBoxes(bbox);
     let o = [];
@@ -128,8 +129,32 @@ class scene {
         }
       }
     }
-    let cx = bbox.x + bbox.width / 2;
-    let cy = bbox.y + bbox.height / 2;
+    let uids = Object.keys(o);
+    if (uids.length > 0) {
+      let cx = bbox.x + bbox.width / 2;
+      let cy = bbox.y + bbox.height / 2;
+      let d = -1;
+      uids.forEach(u => {
+        let j = this.localizers[u];
+        let cbox = j.getBoundingBox();
+        let icx = cbox.x + cbox.width / 2;
+        let icy = cbox.y + cbox.height / 2;
+        let dx = cx - icx;
+        let dy = cy - icy;
+        let did = Math.sqrt(dx * dx + dy * dy);
+        if (d < 0 || did < d) {
+          d = did;
+          result = j;
+        }
+      });
+      if (DEBUG_PROXIMITY === true) {
+        this._showPoint(cx, cy, "obj1");
+        let cbox = result.getBoundingBox();
+        let icx = cbox.x + cbox.width / 2;
+        let icy = cbox.y + cbox.height / 2;
+        this._showPoint(icx, icy, "obj2");
+      }
+    }
     return result;
   }
 
@@ -226,5 +251,22 @@ class scene {
       grd.content.push(l);
     }
     this.svg.appendChild(loadSVGTag(grd));
+  }
+  _showPoint(x, y, id) {
+    let c = document.getElementById(id);
+    if (c === null) {
+      let p = {
+        tag: "circle",
+        class: "debugCircle",
+        id: id,
+        cx: x,
+        cy: y,
+        r: 5
+      };
+      this.svg.appendChild(loadSVGTag(p));
+    } else {
+      c.setAttribute("cx", x);
+      c.setAttribute("cy", y);
+    }
   }
 }

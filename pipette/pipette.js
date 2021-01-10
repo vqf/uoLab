@@ -5,6 +5,7 @@ let pipette_code = {
     {
       tag: "path",
       class: "pipette_tipholder",
+      id: "pipette_tipholder",
       d:
         "m 12.287303,78.916993 c 0,0 0,2.90619 0,2.90619 0,0 0.88869,0 0.88869,0 0,0 0,-2.90619 0,-2.90619 0,0 -0.88869,0 -0.88869,0"
     },
@@ -56,7 +57,7 @@ let pipette_code = {
     {
       tag: "path",
       id: "tip",
-      class: "yellow_tip",
+      class: "yellow_tip invis",
       d:
         "m 13.325755,83.450429 c 0.126663,-2.206485 0.253271,-3.185743 0.379918,-4.165296 -0.316623,0.02967 -0.632961,0.05931 -0.949756,0.05932 -0.316795,1.1e-5 -0.633361,-0.02965 -0.949984,-0.05932 0.12665,0.979553 0.253242,1.958659 0.379931,4.165614 0.126688,2.206956 0.253319,5.639813 0.379969,9.073196 0,0 0.37995,0 0.37995,0 0.12665,-3.433383 0.25331,-6.867029 0.379972,-9.073514 z"
     }
@@ -116,7 +117,18 @@ class pipette extends plugger {
   getMessage(msg) {
     super.getMessage(msg);
     if (msg === "hasMoved") {
-      this.closest = this.scene.closest(this);
+      let closest = this.scene.closest(this, 2, "pipette_tipholder");
+      if (closest === null) {
+        if (this.closest !== null) {
+          this.closest.getMessage("left");
+        }
+      } else {
+        closest.getMessage("closest");
+        if (this.closest !== null && this.closest._uid() !== closest._uid()) {
+          this.closest.getMessage("left");
+        }
+      }
+      this.closest = closest;
     }
   }
 }
@@ -131,5 +143,14 @@ class yellowTip extends plugger {
     super.inject(x, y);
     let bod = this.getElementByLocalId("ytip");
     this.makeDraggable(bod);
+  }
+  getMessage(msg) {
+    super.getMessage(msg);
+    if (msg === "closest") {
+      this.highlightOn();
+    }
+    if (msg === "left") {
+      this.highlightOff();
+    }
   }
 }

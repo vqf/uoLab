@@ -15,3 +15,8 @@ body {
 .debugBox {
   fill: blue;
 }
+.debugCircle {
+  fill: #f00;
+  stroke: #000;
+  stroke-width: 0.5;
+}
