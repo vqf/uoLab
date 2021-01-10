@@ -67,6 +67,7 @@ class plugger {
     this.uid = _uid();
     this._hoverfilter();
     this.closest = null;
+    this.state = null;
     this.scaleCorrection = 1;
     this.pos = this.parent.createSVGTransform();
     this.angle = this.parent.createSVGTransform();
@@ -274,6 +275,12 @@ class plugger {
     this.setPos(dx, dy);
     this.getMessage("hasMoved");
   }
+  _endDrag(e) {
+    if (this.drag.isDragging === true) {
+      this.drag.isDragging = false;
+    }
+    this.getMessage("mouseUp");
+  }
 
   makeDraggable(obj) {
     let myself = this;
@@ -296,9 +303,7 @@ class plugger {
     this.drag.dragEvents.mouseup = document.addEventListener(
       "mouseup",
       function(e) {
-        if (myself.drag.isDragging === true) {
-          myself.drag.isDragging = false;
-        }
+        myself._endDrag(e);
       }
     );
   }
