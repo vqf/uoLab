@@ -63,17 +63,17 @@ class scene {
     this.squares[uid] = [];
   }
 
-  _getBoxes(bb) {
+  _getBoxes(bb, sur) {
     let result = [];
-    result.nstx = inRange(Math.floor(bb.x / this.box.x), 0, this.nboxes);
+    result.nstx = inRange(Math.floor(bb.x / this.box.x) - sur, 0, this.nboxes);
     result.nndx = inRange(
-      Math.floor((bb.x + bb.width) / this.box.x),
+      Math.floor((bb.x + bb.width) / this.box.x) + sur,
       0,
       this.nboxes
     );
-    result.nsty = inRange(Math.floor(bb.y / this.box.y), 0, this.nboxes);
+    result.nsty = inRange(Math.floor(bb.y / this.box.y) - sur, 0, this.nboxes);
     result.nndy = inRange(
-      Math.floor((bb.y + bb.height) / this.box.y),
+      Math.floor((bb.y + bb.height) / this.box.y) + sur,
       0,
       this.nboxes
     );
@@ -83,7 +83,7 @@ class scene {
   _calcSpace(obj) {
     let bb = obj.getBoundingBox();
     let uid = obj._uid();
-    let boxes = this._getBoxes(bb);
+    let boxes = this._getBoxes(bb, 0);
     for (let i = boxes.nstx; i <= boxes.nndx; i++) {
       for (let j = boxes.nsty; j <= boxes.nndy; j++) {
         this.squares[uid].push([i, j]);
@@ -102,21 +102,12 @@ class scene {
     return obj;
   }
 
-  closest(obj, surround, partid) {
-    let sur = _def(surround, 1);
-    let puid = obj._uid();
-    let result = null;
-    let bbox = obj.getBoundingBox();
-    if (typeof partid !== "undefined") {
-      let uid = document.getElementById(partid + obj._uid());
-      bbox = uid.getBoundingClientRect();
-    }
-    let b = this._getBoxes(bbox);
+  _getFromGrid(b, puid) {
     let o = [];
-    let stx = inRange(b.nstx - sur, 0, this.nboxes);
-    let ndx = inRange(b.nndx + sur, 0, this.nboxes);
-    let sty = inRange(b.nsty - sur, 0, this.nboxes);
-    let ndy = inRange(b.nndy + sur, 0, this.nboxes);
+    let stx = inRange(b.nstx, 0, this.nboxes);
+    let ndx = inRange(b.nndx, 0, this.nboxes);
+    let sty = inRange(b.nsty, 0, this.nboxes);
+    let ndy = inRange(b.nndy, 0, this.nboxes);
     for (let i = stx; i <= ndx; i++) {
       for (let j = sty; j <= ndy; j++) {
         let k = Object.keys(this.grid[i][j]);
@@ -129,6 +120,31 @@ class scene {
         }
       }
     }
+    return o;
+  }
+
+  clashes(obj) {
+    let puid = obj._uid();
+    let bbox = obj.getBoundingBox();
+    let b = this._getBoxes(bbox, 0);
+    let o = this._getFromGrid(b, puid);
+    let k = Object.keys(o);
+    if (k.length > 0) {
+      console.log("Collision");
+    }
+  }
+
+  closest(obj, surround, partid) {
+    let sur = _def(surround, 1);
+    let puid = obj._uid();
+    let result = null;
+    let bbox = obj.getBoundingBox();
+    if (typeof partid !== "undefined") {
+      let uid = document.getElementById(partid + obj._uid());
+      bbox = uid.getBoundingClientRect();
+    }
+    let b = this._getBoxes(bbox, sur);
+    let o = this._getFromGrid(b, puid);
     let uids = Object.keys(o);
     if (uids.length > 0) {
       let cx = bbox.x + bbox.width / 2;

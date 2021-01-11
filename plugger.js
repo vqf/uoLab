@@ -322,11 +322,12 @@ class plugger {
   }
 
   getMessage(msg) {
-    if (msg === "hasMoved") {
-      if (this.scene instanceof scene) {
+    if (this.scene instanceof scene) {
+      if (msg === "hasMoved") {
         let myself = this;
         this.scene._clearObjectGrid(myself);
         this.scene._calcSpace(myself);
+        this.scene.clashes(myself);
       }
     }
   }
