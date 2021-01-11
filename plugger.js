@@ -327,7 +327,6 @@ class plugger {
         let myself = this;
         this.scene._clearObjectGrid(myself);
         this.scene._calcSpace(myself);
-        this.scene.clashes(myself);
       }
     }
   }

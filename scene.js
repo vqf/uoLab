@@ -123,17 +123,6 @@ class scene {
     return o;
   }
 
-  clashes(obj) {
-    let puid = obj._uid();
-    let bbox = obj.getBoundingBox();
-    let b = this._getBoxes(bbox, 0);
-    let o = this._getFromGrid(b, puid);
-    let k = Object.keys(o);
-    if (k.length > 0) {
-      console.log("Collision");
-    }
-  }
-
   closest(obj, surround, partid) {
     let sur = _def(surround, 1);
     let puid = obj._uid();
@@ -161,6 +150,7 @@ class scene {
         if (d < 0 || did < d) {
           d = did;
           result = j;
+          //Check clash
         }
       });
       if (DEBUG_PROXIMITY === true) {
