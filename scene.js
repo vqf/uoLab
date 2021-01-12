@@ -140,9 +140,13 @@ class scene {
     let result = null;
     let bbox = obj.getBoundingBox();
     let bbbox = bbox;
+    let inner = false;
     if (typeof partid !== "undefined") {
       let uid = document.getElementById(partid + obj._uid());
-      bbox = uid.getBoundingClientRect();
+      if (uid !== null) {
+        bbox = uid.getBoundingClientRect();
+        inner = true;
+      }
     }
     let b = this._getBoxes(bbbox, sur);
     let o = this._getFromGrid(b, puid);
@@ -155,17 +159,27 @@ class scene {
       uids.forEach(u => {
         let j = this.localizers[u];
         let cbox = j.getBoundingBox();
-        let icx = cbox.x + cbox.width / 2;
-        let icy = cbox.y + cbox.height / 2;
-        let dx = cx - icx;
-        let dy = cy - icy;
-        let did = Math.sqrt(dx * dx + dy * dy);
         //Check clash
         let isClashing = this._clash(cbox, bbbox);
         if (isClashing === true) {
           obj.getMessage("clash");
           hasClashes = true;
         }
+      });
+      // Is there an inner element?
+      if (inner === true) {
+        b = this._getBoxes(bbox, sur);
+        o = this._getFromGrid(b, puid);
+        uids = Object.keys(o);
+      }
+      uids.forEach(u => {
+        let j = this.localizers[u];
+        let cbox = j.getBoundingBox();
+        let icx = cbox.x + cbox.width / 2;
+        let icy = cbox.y + cbox.height / 2;
+        let dx = cx - icx;
+        let dy = cy - icy;
+        let did = Math.sqrt(dx * dx + dy * dy);
         if (d < 0 || did < d) {
           d = did;
           result = j;
