@@ -68,6 +68,8 @@ class plugger {
     this._hoverfilter();
     this.closest = null;
     this.state = null;
+    this.lastPos = null;
+    this.cpos = null;
     this.scaleCorrection = 1;
     this.pos = this.parent.createSVGTransform();
     this.angle = this.parent.createSVGTransform();
@@ -181,6 +183,7 @@ class plugger {
     x = _def(x);
     y = _def(y);
     this.pos.setTranslate(x, y);
+    this.cpos = [x, y];
   }
   setAngle(a, x, y) {
     if (typeof x === "undefined") {
@@ -328,6 +331,15 @@ class plugger {
         this.scene._clearObjectGrid(myself);
         this.scene._calcSpace(myself);
       }
+      if (msg === "clash") {
+        this.setPos(this.lastPos[0], this.lastPos[1]);
+        this._endDrag();
+      }
+      if (msg === "safePos") {
+        if (this.cpos !== null) {
+          this.lastPos = [this.cpos[0], this.cpos[1]];
+        }
+      }
     }
   }
 
@@ -341,6 +353,8 @@ class plugger {
       this._initInjected();
     }
     this.setPos(x, y);
+    this.lastPos = [x, y];
+    this.cpos = [x, y];
     this._scripts(this.jscode);
     if (this.scene instanceof scene) {
       this.scene._add(this);

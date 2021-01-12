@@ -16,7 +16,7 @@ body {
   fill: blue;
 }
 .debugCircle {
-  fill: #f00;
+  fill: none;
   stroke: #000;
   stroke-width: 0.5;
 }

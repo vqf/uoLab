@@ -123,22 +123,35 @@ class scene {
     return o;
   }
 
+  _clash(r1, r2) {
+    let xl = r1.right <= r2.x;
+    let xh = r1.x >= r2.right;
+    let yl = r1.bottom <= r2.y;
+    let yh = r1.y >= r2.bottom;
+    let result = !(xl | xh | yl | yh);
+    /*this._showRect(r1, "r1");
+    this._showRect(r2, "r2");*/
+    return result;
+  }
+
   closest(obj, surround, partid) {
     let sur = _def(surround, 1);
     let puid = obj._uid();
     let result = null;
     let bbox = obj.getBoundingBox();
+    let bbbox = bbox;
     if (typeof partid !== "undefined") {
       let uid = document.getElementById(partid + obj._uid());
       bbox = uid.getBoundingClientRect();
     }
-    let b = this._getBoxes(bbox, sur);
+    let b = this._getBoxes(bbbox, sur);
     let o = this._getFromGrid(b, puid);
     let uids = Object.keys(o);
     if (uids.length > 0) {
       let cx = bbox.x + bbox.width / 2;
       let cy = bbox.y + bbox.height / 2;
       let d = -1;
+      let hasClashes = false;
       uids.forEach(u => {
         let j = this.localizers[u];
         let cbox = j.getBoundingBox();
@@ -147,12 +160,20 @@ class scene {
         let dx = cx - icx;
         let dy = cy - icy;
         let did = Math.sqrt(dx * dx + dy * dy);
+        //Check clash
+        let isClashing = this._clash(cbox, bbbox);
+        if (isClashing === true) {
+          obj.getMessage("clash");
+          hasClashes = true;
+        }
         if (d < 0 || did < d) {
           d = did;
           result = j;
-          //Check clash
         }
       });
+      if (hasClashes === false) {
+        obj.getMessage("safePos");
+      }
       if (DEBUG_PROXIMITY === true) {
         this._showPoint(cx, cy, "obj1");
         let cbox = result.getBoundingBox();
@@ -160,6 +181,8 @@ class scene {
         let icy = cbox.y + cbox.height / 2;
         this._showPoint(icx, icy, "obj2");
       }
+    } else {
+      obj.getMessage("safePos");
     }
     return result;
   }
@@ -273,6 +296,26 @@ class scene {
     } else {
       c.setAttribute("cx", x);
       c.setAttribute("cy", y);
+    }
+  }
+  _showRect(box, id) {
+    let c = document.getElementById(id);
+    if (c === null) {
+      let p = {
+        tag: "rect",
+        class: "debugCircle",
+        id: id,
+        x: box.x,
+        y: box.y,
+        width: box.width,
+        height: box.height
+      };
+      this.svg.appendChild(loadSVGTag(p));
+    } else {
+      c.setAttribute("x", box.x);
+      c.setAttribute("y", box.y);
+      c.setAttribute("width", box.width);
+      c.setAttribute("height", box.height);
     }
   }
 }
