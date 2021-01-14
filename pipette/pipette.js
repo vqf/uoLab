@@ -117,6 +117,9 @@ class pipette extends plugger {
   getMessage(msg) {
     super.getMessage(msg);
     if (msg === "hasMoved") {
+      let myself = this;
+      this.scene._clearObjectGrid(myself);
+      this.scene._calcSpace(myself);
       let closest = this.scene.closest(this, 2, "pipette_tipholder");
       if (closest === null) {
         if (this.closest !== null) {
