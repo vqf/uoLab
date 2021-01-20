@@ -330,7 +330,7 @@ class plugger {
         let myself = this;
         this.scene._clearObjectGrid(myself);
         this.scene._calcSpace(myself);
-        this.scene.closest(this, 2);
+        this.closest = this.scene.closest(myself, 2);
       }
       if (msg === "clash") {
         this.setPos(this.lastPos[0], this.lastPos[1]);

@@ -157,13 +157,15 @@ class scene {
       let d = -1;
       let hasClashes = false;
       uids.forEach(u => {
-        let j = this.localizers[u];
-        let cbox = j.getBoundingBox();
-        //Check clash
-        let isClashing = this._clash(cbox, bbbox);
-        if (isClashing === true) {
-          obj.getMessage("clash");
-          hasClashes = true;
+        if (hasClashes === false) {
+          let j = this.localizers[u];
+          let cbox = j.getBoundingBox();
+          //Check clash
+          let isClashing = this._clash(cbox, bbbox);
+          if (isClashing === true) {
+            obj.getMessage("clash");
+            hasClashes = true;
+          }
         }
       });
       // Is there an inner element?

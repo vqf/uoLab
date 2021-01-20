@@ -76,30 +76,7 @@ let yellow_tip = {
   }
 };
 
-function pipette_behavior() {
-  function depress_plunger(e) {
-    let tp = document.getElementById("local(pipette_plunger)");
-    toggleClass(tp, "depressed_plunger");
-  }
-  function release_tip(e) {
-    console.log("releasing");
-  }
-  function changeVolume(e) {
-    //console.log(e);
-  }
-  let tp = document.getElementById("local(pipette_plunger)");
-  tp.addEventListener("click", function(e) {
-    depress_plunger(e);
-  });
-  let rp = document.getElementById("local(pipette_unloader)");
-  rp.addEventListener("click", function(e) {
-    release_tip(e);
-  });
-  let bp = document.getElementById("local(pipette_body)");
-  bp.addEventListener("click", function(e) {
-    changeVolume(e);
-  });
-}
+function pipette_behavior() {}
 function tip_behavior() {}
 
 class pipette extends plugger {
@@ -115,9 +92,11 @@ class pipette extends plugger {
     this.makeDraggable(bod);
   }
   getMessage(msg) {
-    super.getMessage(msg);
     if (msg === "hasMoved") {
-      let closest = this.scene.closest(this, 2, "pipette_tipholder");
+      let myself = this;
+      this.scene._clearObjectGrid(myself);
+      this.scene._calcSpace(myself);
+      let closest = this.scene.closest(myself, 2, "pipette_tipholder");
       if (closest === null) {
         if (this.closest !== null) {
           this.closest.getMessage("left");
@@ -129,9 +108,15 @@ class pipette extends plugger {
         }
       }
       this.closest = closest;
-    }
-    if (msg === "mouseUp") {
-      debugger;
+    } else {
+      super.getMessage(msg);
+      if (msg === "mouseUp") {
+        if (this.closest !== null) {
+          if (this.closest instanceof yellowTip) {
+            console.log("load");
+          }
+        }
+      }
     }
   }
 }
