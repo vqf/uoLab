@@ -85,6 +85,7 @@ class pipette extends plugger {
     super(parent, mp, pipette_behavior);
     this.setPos(x, y);
     this.scaleCorrection = 2;
+    this.state.plunger = "released";
   }
   inject(x, y) {
     super.inject(x, y);
@@ -119,9 +120,36 @@ class pipette extends plugger {
       }
     }
   }
-  _initInjected(){
+  _initInjected() {
     super._initInjected();
-    
+    this.addEventListener(
+      "click",
+      function(e, myself) {
+        myself.touchPlunger(e);
+      },
+      "pipette_plunger"
+    );
+    this.addEventListener(
+      "click",
+      function(e, myself) {
+        myself.releaseTip(e);
+      },
+      "pipette_unloader"
+    );
+  }
+  touchPlunger(e) {
+    const tp = this.getElementByLocalId("pipette_plunger");
+    toggleClass(tp, "depressed_plunger");
+    if (this.state.plunger === "released") {
+      this.state.plunger = "pressed";
+      this.getMessage("pressPlunger");
+    } else {
+      this.state.plunger = "released";
+      this.getMessage("releasePlunger");
+    }
+  }
+  releaseTip(e) {
+    this.getMessage("releaseTip");
   }
 }
 

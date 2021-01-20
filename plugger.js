@@ -67,7 +67,7 @@ class plugger {
     this.uid = _uid();
     this._hoverfilter();
     this.closest = null;
-    this.state = null;
+    this.state = {};
     this.lastPos = null;
     this.cpos = null;
     this.scaleCorrection = 1;
@@ -165,12 +165,16 @@ class plugger {
     return result;
   }
 
-  addEventListener(evt, f) {
+  addEventListener(evt, f, lid) {
+    let el = this.injected;
+    if (typeof lid !== undefined) {
+      el = this.getElementByLocalId(lid);
+    }
     let myself = this;
     let onthefly = function(e) {
       f(e, myself);
     };
-    this.injected.addEventListener(evt, onthefly);
+    el.addEventListener(evt, onthefly);
   }
 
   getElementByLocalId(lid) {
