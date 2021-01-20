@@ -86,6 +86,7 @@ class pipette extends plugger {
     this.setPos(x, y);
     this.scaleCorrection = 2;
     this.state.plunger = "released";
+    this.state.tip = "unloaded";
   }
   inject(x, y) {
     super.inject(x, y);
@@ -113,12 +114,26 @@ class pipette extends plugger {
       super.getMessage(msg);
       if (msg === "mouseUp") {
         if (this.closest !== null) {
-          if (this.closest instanceof yellowTip) {
-            console.log("load");
+          if (
+            this.state.tip === "unloaded" &&
+            this.closest instanceof yellowTip
+          ) {
+            this.loadTip();
           }
         }
       }
     }
+  }
+  loadTip() {
+    const tip = this.closest;
+    const bbtip = tip.getBoundingBox();
+    const bbself = this.getBoundingBox("pipette_tipholder");
+    this.scene._showRect(bbself, "pip");
+    const tipx = bbtip.x + bbtip.width / 2;
+    const tipy = bbtip.y;
+    const destx = tipx - bbself.x - bbself.width / 2;
+    const desty = tipy - bbself.y - bbself.height;
+    this.move(destx, desty, 0.5);
   }
   _initInjected() {
     super._initInjected();

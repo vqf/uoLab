@@ -142,8 +142,12 @@ class plugger {
     this._add(this.parent, c);
   }
 
-  getBoundingBox() {
-    return this.injected.getBoundingClientRect();
+  getBoundingBox(lid) {
+    let el = this.injected;
+    if (typeof lid !== "undefined") {
+      el = this.getElementByLocalId(lid);
+    }
+    return el.getBoundingClientRect();
   }
 
   _dragData() {
