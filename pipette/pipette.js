@@ -119,6 +119,10 @@ class pipette extends plugger {
       }
     }
   }
+  _initInjected(){
+    super._initInjected();
+    
+  }
 }
 
 class yellowTip extends plugger {

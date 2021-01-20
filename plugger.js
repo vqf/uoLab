@@ -281,8 +281,8 @@ class plugger {
   _endDrag(e) {
     if (this.drag.isDragging === true) {
       this.drag.isDragging = false;
+      this.getMessage("mouseUp");
     }
-    this.getMessage("mouseUp");
   }
 
   makeDraggable(obj) {
