@@ -128,7 +128,6 @@ class pipette extends plugger {
     const tip = this.closest;
     const bbtip = tip.getBoundingBox();
     const bbself = this.getBoundingBox("pipette_tipholder");
-    this.scene._showRect(bbself, "pip");
     const tipx = bbtip.x + bbtip.width / 2;
     const tipy = bbtip.y;
     const destx = tipx - bbself.x - bbself.width / 2;

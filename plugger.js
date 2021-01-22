@@ -67,7 +67,10 @@ class plugger {
     this.uid = _uid();
     this._hoverfilter();
     this.closest = null;
+    // Status, links
     this.state = {};
+    this.linkedTo = [];
+    //
     this.lastPos = null;
     this.cpos = null;
     this.scaleCorrection = 1;
