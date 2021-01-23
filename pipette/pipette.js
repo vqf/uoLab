@@ -93,7 +93,8 @@ class pipette extends plugger {
     let bod = this.getElementByLocalId("pipette_body");
     this.makeDraggable(bod);
   }
-  getMessage(msg) {
+  getMessage(msg, sender) {
+    let from = _def(sender, null);
     if (msg === "hasMoved") {
       let myself = this;
       this.scene._clearObjectGrid(myself);
@@ -101,12 +102,12 @@ class pipette extends plugger {
       let closest = this.scene.closest(myself, 2, "pipette_tipholder");
       if (closest === null) {
         if (this.closest !== null) {
-          this.closest.getMessage("left");
+          this.closest.getMessage("left", myself);
         }
       } else {
-        closest.getMessage("closest");
+        closest.getMessage("closest", myself);
         if (this.closest !== null && this.closest._uid() !== closest._uid()) {
-          this.closest.getMessage("left");
+          this.closest.getMessage("left", myself);
         }
       }
       this.closest = closest;
@@ -114,10 +115,8 @@ class pipette extends plugger {
       super.getMessage(msg);
       if (msg === "mouseUp") {
         if (this.closest !== null) {
-          if (
-            this.state.tip === "unloaded" &&
-            this.closest instanceof yellowTip
-          ) {
+          debugger;
+          if (this.state.tip === "unloaded" && this.closest instanceof tip) {
             this.loadTip();
           }
         }
@@ -125,14 +124,17 @@ class pipette extends plugger {
     }
   }
   loadTip() {
-    const tip = this.closest;
-    const bbtip = tip.getBoundingBox();
-    const bbself = this.getBoundingBox("pipette_tipholder");
-    const tipx = bbtip.x + bbtip.width / 2;
-    const tipy = bbtip.y;
-    const destx = tipx - bbself.x - bbself.width / 2;
-    const desty = tipy - bbself.y - bbself.height;
-    this.move(destx, desty, 0.5);
+    const tp = this.closest;
+    if (tp instanceof tip) {
+      this.state.clashing = false;
+      const bbtip = tp.getBoundingBox();
+      const bbself = this.getBoundingBox("pipette_tipholder");
+      const tipx = bbtip.x + bbtip.width / 2;
+      const tipy = bbtip.y;
+      const destx = tipx - bbself.x - bbself.width / 2;
+      const desty = tipy - bbself.y - bbself.height;
+      this.move(destx, desty, 0.5);
+    }
   }
   _initInjected() {
     super._initInjected();
@@ -167,7 +169,9 @@ class pipette extends plugger {
   }
 }
 
-class yellowTip extends plugger {
+class tip extends plugger {}
+
+class yellowTip extends tip {
   constructor(parent) {
     let tp = loadSVGTag(yellow_tip);
     super(parent, tp, tip_behavior);
@@ -178,12 +182,14 @@ class yellowTip extends plugger {
     let bod = this.getElementByLocalId("ytip");
     this.makeDraggable(bod);
   }
-  getMessage(msg) {
+  getMessage(msg, sender) {
+    let from = _def(sender, null);
+    let fromPipette = from instanceof pipette;
     super.getMessage(msg);
-    if (msg === "closest") {
+    if (fromPipette === true && msg === "closest") {
       this.highlightOn();
     }
-    if (msg === "left") {
+    if (fromPipette === true && msg === "left") {
       this.highlightOff();
     }
   }

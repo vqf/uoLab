@@ -69,7 +69,8 @@ class plugger {
     this.closest = null;
     // Status, links
     this.state = {};
-    this.linkedTo = [];
+    this.state.noClash = {};
+    this.linkedTo = {};
     //
     this.lastPos = null;
     this.cpos = null;
@@ -81,6 +82,14 @@ class plugger {
     this.anim = {};
     this.pt = this.parent.createSVGPoint();
     this.drag = this._dragData();
+  }
+  clashesWith(obj) {
+    let result = true;
+    let uid = obj._uid();
+    if (this.state.noClash.hasOwnProperty(uid)) {
+      result = false;
+    }
+    return result;
   }
 
   _uid() {
@@ -143,6 +152,14 @@ class plugger {
     this._addSVGDef(st);
     let c = loadSVGTag(f);
     this._add(this.parent, c);
+  }
+
+  link(obj) {
+    let uid = obj._uid();
+    this.link[uid] = obj;
+  }
+  unlink(id) {
+    delete this.link[id];
   }
 
   getBoundingBox(lid) {
@@ -335,7 +352,8 @@ class plugger {
     return this.injected;
   }
 
-  getMessage(msg) {
+  getMessage(msg, sender) {
+    let from = _def(sender, null);
     if (this.scene instanceof scene) {
       if (msg === "hasMoved") {
         let myself = this;

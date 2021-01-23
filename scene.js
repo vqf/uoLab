@@ -159,12 +159,14 @@ class scene {
       uids.forEach(u => {
         if (hasClashes === false) {
           let j = this.localizers[u];
-          let cbox = j.getBoundingBox();
-          //Check clash
-          let isClashing = this._clash(cbox, bbbox);
-          if (isClashing === true) {
-            obj.getMessage("clash");
-            hasClashes = true;
+          if (obj.clashesWith(j)) {
+            let cbox = j.getBoundingBox();
+            //Check clash
+            let isClashing = this._clash(cbox, bbbox);
+            if (isClashing === true) {
+              obj.getMessage("clash");
+              hasClashes = true;
+            }
           }
         }
       });
