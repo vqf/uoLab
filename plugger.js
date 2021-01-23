@@ -88,6 +88,7 @@ class plugger {
     let uid = obj._uid();
     if (this.state.noClash.hasOwnProperty(uid)) {
       result = false;
+      debugger;
     }
     return result;
   }

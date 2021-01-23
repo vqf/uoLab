@@ -115,7 +115,6 @@ class pipette extends plugger {
       super.getMessage(msg);
       if (msg === "mouseUp") {
         if (this.closest !== null) {
-          debugger;
           if (this.state.tip === "unloaded" && this.closest instanceof tip) {
             this.loadTip();
           }
@@ -126,14 +125,18 @@ class pipette extends plugger {
   loadTip() {
     const tp = this.closest;
     if (tp instanceof tip) {
-      this.state.clashing = false;
+      let uid = tp._uid();
+      this.state.noClash[uid] = tp;
       const bbtip = tp.getBoundingBox();
       const bbself = this.getBoundingBox("pipette_tipholder");
       const tipx = bbtip.x + bbtip.width / 2;
       const tipy = bbtip.y;
+      const fy = bbself.height;
       const destx = tipx - bbself.x - bbself.width / 2;
       const desty = tipy - bbself.y - bbself.height;
-      this.move(destx, desty, 0.5);
+      this.move(destx, desty, 0.5)
+        .then()
+        .move(0, fy, 0.2);
     }
   }
   _initInjected() {
