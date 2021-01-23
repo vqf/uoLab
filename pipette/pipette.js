@@ -111,6 +111,7 @@ class pipette extends plugger {
         }
       }
       this.closest = closest;
+      this.broadcast(msg);
     } else {
       super.getMessage(msg);
       if (msg === "mouseUp") {
@@ -137,6 +138,7 @@ class pipette extends plugger {
       this.move(destx, desty, 0.5)
         .then()
         .move(0, fy, 0.2);
+      this.link(tp);
     }
   }
   _initInjected() {

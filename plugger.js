@@ -83,12 +83,20 @@ class plugger {
     this.pt = this.parent.createSVGPoint();
     this.drag = this._dragData();
   }
+
+  broadcast(msg) {
+    let myself = this;
+    const objs = Object.keys(this.linkedTo);
+    objs.forEach(k => {
+      this.linkedTo[k].getMessage(msg, myself);
+    });
+  }
+
   clashesWith(obj) {
     let result = true;
     let uid = obj._uid();
     if (this.state.noClash.hasOwnProperty(uid)) {
       result = false;
-      debugger;
     }
     return result;
   }
@@ -157,10 +165,10 @@ class plugger {
 
   link(obj) {
     let uid = obj._uid();
-    this.link[uid] = obj;
+    this.linkedTo[uid] = obj;
   }
   unlink(id) {
-    delete this.link[id];
+    delete this.linkedTo[id];
   }
 
   getBoundingBox(lid) {
