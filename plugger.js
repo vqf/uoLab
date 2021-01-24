@@ -221,6 +221,9 @@ class plugger {
     y = _def(y);
     this.pos.setTranslate(x, y);
     this.cpos = [x, y];
+    Object.keys(this.linkedTo).forEach(k => {
+      this.linkedTo[k].setPos(x, y);
+    });
   }
   setAngle(a, x, y) {
     if (typeof x === "undefined") {
@@ -258,6 +261,7 @@ class plugger {
     if (typeof dur === "undefined" || dur === undefined) {
       dur = 1;
     }
+
     this.anim.animRotate(angle, x, y, dur);
     return this;
   }
