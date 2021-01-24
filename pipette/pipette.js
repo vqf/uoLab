@@ -135,10 +135,15 @@ class pipette extends plugger {
       const fy = bbself.height;
       const destx = tipx - bbself.x - bbself.width / 2;
       const desty = tipy - bbself.y - bbself.height;
+      let myself = this;
+      let f = function() {
+        debugger;
+        myself.link(tp);
+      };
       this.move(destx, desty, 0.5)
         .then()
-        .move(0, fy, 0.2);
-      this.link(tp);
+        .move(0, fy, 0.2)
+        .then(f);
     }
   }
   _initInjected() {

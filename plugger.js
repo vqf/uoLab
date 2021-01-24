@@ -244,8 +244,8 @@ class plugger {
     this.parent.appendChild(d);
   }
 
-  then() {
-    this.anim.then();
+  then(f) {
+    this.anim.then(f);
     return this;
   }
 

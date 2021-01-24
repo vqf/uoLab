@@ -7,6 +7,7 @@ class anim {
     this.rotate = all.getItem(1);
     this.resize = all.getItem(2);
     this.queue = false;
+    this.promises = [];
     this.loop = new _looper();
   }
   animTranslate(dx, dy, dur) {
@@ -21,8 +22,12 @@ class anim {
     this.loop.loop("t", this, dur, target);
     return this.loop;
   }
-  then() {
+  then(f) {
+    let pf = _def(f, null);
     this.queue = true;
+    if (pf !== null) {
+      this.promises.push(pf);
+    }
     return this;
   }
   animRotate(angle, x, y, dur) {
@@ -59,6 +64,11 @@ class _looper {
   }
   loop(type, info, dur, target) {
     if (this.busy === true) {
+      if (this.info.promises.length > 0) {
+        this.info.promises.forEach(p => {
+          this.queue.push(p);
+        });
+      }
       this.queue.push([type, info, dur, target]);
     } else {
       this.type = type;
@@ -94,7 +104,11 @@ class _looper {
       this.busy = false;
       if (this.queue.length > 0) {
         let opts = this.queue.shift();
-        this.loop(opts[0], opts[1], opts[2], opts[3]);
+        if (typeof opts === "function") {
+          opts();
+        } else {
+          this.loop(opts[0], opts[1], opts[2], opts[3]);
+        }
       }
       this.info.parent.getMessage("hasMoved");
     }

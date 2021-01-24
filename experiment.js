@@ -8,16 +8,16 @@ pipette1.inject(100, 100);
 
 let pipette2 = sc.add("pipette", 300, 100);
 let tips = [];
-for (let i = 0; i < 20; i++) {
+for (let i = 0; i < 1; i++) {
   let newtip = new yellowTip(sc);
   tips.push(newtip);
-  newtip.inject(i * 5, 100);
+  newtip.inject(i * 10, 100);
   //newtip.scale(2, 2);
 }
 
 let epp = new tube(sc);
 epp.inject(100, 100);
-tips.forEach((o, i) => {
+/*tips.forEach((o, i) => {
   o.rotate(45 + 10 * i, 1)
     .then()
     .rotate(-45 - 10 * i, 1);
@@ -25,7 +25,7 @@ tips.forEach((o, i) => {
   o.move(100 + 10 * i, 0, 2)
     .then()
     .move(-50 - 10 * i, 0, 1);
-});
+});*/
 if (DEBUG > 0) console.log("Experiment loaded");
 
 //epp.addEventListener("click", flip);
