@@ -56,7 +56,10 @@ class plugger {
   constructor(parent, obj, jscode, style) {
     this.parent = parent;
     this.publicuid = "amnfabenfo";
+    this.uid = _uid();
     this.scene = null;
+    this.scaleCorrection = 1;
+    this.injected = null;
     if (parent instanceof scene) {
       this.scene = parent;
       this.parent = parent.getSvg();
@@ -64,24 +67,40 @@ class plugger {
     this.obj = _def(obj);
     this.jscode = _def(jscode.toString());
     this.style = _def(style);
-    this.uid = _uid();
+    this.backup = {
+      jscode: _def(jscode.toString()),
+      style: _def(style)
+    };
+    this.pt = this.parent.createSVGPoint();
+    //
+    this._init();
+  }
+
+  _init() {
     this._hoverfilter();
     this.closest = null;
     // Status, links
     this.state = {};
     this.state.noClash = {};
     this.linkedTo = {};
-    //
     this.lastPos = null;
     this.cpos = null;
-    this.scaleCorrection = 1;
+    this.pos = null;
+    this.angle = null;
+    this.resize = null;
     this.pos = this.parent.createSVGTransform();
     this.angle = this.parent.createSVGTransform();
     this.resize = this.parent.createSVGTransform();
+    this.inverse = this.parent.createSVGTransform();
     this.injected = null;
     this.anim = {};
-    this.pt = this.parent.createSVGPoint();
     this.drag = this._dragData();
+  }
+
+  reset() {
+    Object.keys(this.backup).forEach(k => {
+      this[k] = this.backup[k];
+    });
   }
 
   broadcast(msg) {
@@ -221,9 +240,9 @@ class plugger {
     y = _def(y);
     this.pos.setTranslate(x, y);
     this.cpos = [x, y];
-    Object.keys(this.linkedTo).forEach(k => {
+    /*Object.keys(this.linkedTo).forEach(k => {
       this.linkedTo[k].setPos(x, y);
-    });
+    });*/
   }
   setAngle(a, x, y) {
     if (typeof x === "undefined") {
@@ -353,9 +372,11 @@ class plugger {
   }
 
   _initInjected() {
+    this.injected.transform.baseVal.clear();
     this.injected.transform.baseVal.appendItem(this.pos);
     this.injected.transform.baseVal.appendItem(this.angle);
     this.injected.transform.baseVal.appendItem(this.resize);
+    this.injected.transform.baseVal.appendItem(this.inverse);
     let myself = this;
     this.anim = new anim(myself);
     this.scale(this.scaleCorrection, this.scaleCorrection);
@@ -386,9 +407,29 @@ class plugger {
     }
   }
 
+  insert(obj, x, y) {
+    x = 0;
+    y = 0;
+    if (obj.injected !== null) {
+      obj.injected.parentNode.removeChild(obj.injected);
+      obj.injected = null;
+      obj._init();
+      //obj.reset();
+    }
+    //obj._shadow();
+    obj.inverse.setMatrix(this.injected.getCTM().inverse());
+    obj.injected = this.injected.appendChild(obj.obj);
+    obj.injected.classList.add(this._mine("g"));
+    obj._initInjected();
+    obj.setPos(x, y);
+    obj.lastPos = [x, y];
+    obj.cpos = [x, y];
+    obj._scripts(this.jscode);
+  }
+
   inject(x, y) {
-    x = _def(x);
-    y = _def(y);
+    x = _def(x, 0);
+    y = _def(y, 0);
     if (this.injected === null) {
       this._shadow();
       this.injected = this.parent.appendChild(this.obj);
@@ -430,8 +471,8 @@ class plugger {
   _innerjs() {
     let of = /function[\s\n\r]+[^\s\n\r]*[\s\n\r]*\([^\)]*\)[\s\n\r]*\{(.+)\}/ms;
     let oc = of.exec(this.jscode);
-    oc.shift();
-    if (oc.length > 0) {
+    if (oc.length > 1) {
+      oc.shift();
       this.jscode = oc[0];
     }
   }

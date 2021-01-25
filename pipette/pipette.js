@@ -111,7 +111,7 @@ class pipette extends plugger {
         }
       }
       this.closest = closest;
-      this.broadcast(msg);
+      //      this.broadcast(msg);
     } else {
       super.getMessage(msg);
       if (msg === "mouseUp") {
@@ -137,8 +137,8 @@ class pipette extends plugger {
       const desty = tipy - bbself.y - bbself.height;
       let myself = this;
       let f = function() {
-        debugger;
         myself.link(tp);
+        tp.getMessage("loaded", myself);
       };
       this.move(destx, desty, 0.5)
         .then()
@@ -185,7 +185,11 @@ class yellowTip extends tip {
   constructor(parent) {
     let tp = loadSVGTag(yellow_tip);
     super(parent, tp, tip_behavior);
+  }
+  _init() {
     this.scaleCorrection = 2;
+    this.loaded = null;
+    super._init();
   }
   inject(x, y) {
     super.inject(x, y);
@@ -195,12 +199,23 @@ class yellowTip extends tip {
   getMessage(msg, sender) {
     let from = _def(sender, null);
     let fromPipette = from instanceof pipette;
-    super.getMessage(msg);
-    if (fromPipette === true && msg === "closest") {
-      this.highlightOn();
-    }
-    if (fromPipette === true && msg === "left") {
-      this.highlightOff();
+    if (fromPipette === true) {
+      if (msg === "loaded") {
+        this.highlightOff();
+        let uid = from._uid();
+        this.state.noClash[uid] = from;
+        this.loaded = from;
+        let myself = this;
+        from.insert(myself);
+      }
+      if (msg === "closest") {
+        this.highlightOn();
+      }
+      if (msg === "left") {
+        this.highlightOff();
+      }
+    } else {
+      super.getMessage(msg);
     }
   }
 }

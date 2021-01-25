@@ -43,6 +43,12 @@ class anim {
     this.loop.loop("r", this, dur, target);
     return this.loop;
   }
+  cleanPromises() {
+    this.promises.forEach(p => {
+      p();
+    });
+    this.promises = [];
+  }
 }
 
 class _looper {
@@ -64,12 +70,13 @@ class _looper {
   }
   loop(type, info, dur, target) {
     if (this.busy === true) {
+      this.queue.push([type, info, dur, target]);
       if (this.info.promises.length > 0) {
         this.info.promises.forEach(p => {
           this.queue.push(p);
         });
+        this.info.promises = [];
       }
-      this.queue.push([type, info, dur, target]);
     } else {
       this.type = type;
       this.current = {};
@@ -109,6 +116,8 @@ class _looper {
         } else {
           this.loop(opts[0], opts[1], opts[2], opts[3]);
         }
+      } else {
+        this.info.cleanPromises();
       }
       this.info.parent.getMessage("hasMoved");
     }
