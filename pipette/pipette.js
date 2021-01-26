@@ -205,8 +205,6 @@ class yellowTip extends tip {
         let uid = from._uid();
         this.state.noClash[uid] = from;
         this.loaded = from;
-        let myself = this;
-        from.insert(myself);
       }
       if (msg === "closest") {
         this.highlightOn();

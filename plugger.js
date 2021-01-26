@@ -182,10 +182,6 @@ class plugger {
     this._add(this.parent, c);
   }
 
-  link(obj) {
-    let uid = obj._uid();
-    this.linkedTo[uid] = obj;
-  }
   unlink(id) {
     delete this.linkedTo[id];
   }
@@ -407,9 +403,14 @@ class plugger {
     }
   }
 
-  insert(obj, x, y) {
-    x = 0;
-    y = 0;
+  link(obj) {
+    // x and y 0 to 1 relative to this.getBoundingBox()
+    let uid = obj._uid();
+    this.linkedTo[uid] = obj;
+    const bb2 = obj.getBoundingBox();
+    if (typeof id !== "undefined") {
+      bb1 = this.getElementByLocalId(id).getBoundingClientRect();
+    }
     if (obj.injected !== null) {
       obj.injected.parentNode.removeChild(obj.injected);
       obj.injected = null;
@@ -417,13 +418,17 @@ class plugger {
       //obj.reset();
     }
     //obj._shadow();
-    obj.inverse.setMatrix(this.injected.getCTM().inverse());
+    const cmat = this.injected.getCTM();
+    obj.inverse.setMatrix(cmat.inverse());
     obj.injected = this.injected.appendChild(obj.obj);
     obj.injected.classList.add(this._mine("g"));
     obj._initInjected();
-    obj.setPos(x, y);
-    obj.lastPos = [x, y];
-    obj.cpos = [x, y];
+    const bb3 = obj.getBoundingBox();
+    const cx = (bb2.x - bb3.x) / 2;
+    const cy = (bb2.y - bb3.y) / 2;
+    obj.setPos(cx, cy);
+    obj.lastPos = [cx, cy];
+    obj.cpos = [cx, cy];
     obj._scripts(this.jscode);
   }
 
