@@ -403,14 +403,25 @@ class plugger {
     }
   }
 
+  _transformBox(bx, mat) {
+    let result = {};
+    this.pt.x = bx.x;
+    this.pt.y = bx.y;
+    var loc = this.pt.matrixTransform(mat);
+    result.x = loc.x;
+    result.y = loc.y;
+    this.pt.x = bx.right;
+    this.pt.y = bx.bottom;
+    loc = this.pt.matrixTransform(mat);
+    result.width = Math.abs(loc.x - result.x);
+    result.height = Math.abs(loc.y - result.y);
+    return result;
+  }
+
   link(obj) {
-    // x and y 0 to 1 relative to this.getBoundingBox()
     let uid = obj._uid();
     this.linkedTo[uid] = obj;
     const bb2 = obj.getBoundingBox();
-    if (typeof id !== "undefined") {
-      bb1 = this.getElementByLocalId(id).getBoundingClientRect();
-    }
     if (obj.injected !== null) {
       obj.injected.parentNode.removeChild(obj.injected);
       obj.injected = null;
@@ -418,17 +429,18 @@ class plugger {
       //obj.reset();
     }
     //obj._shadow();
-    const cmat = this.injected.getCTM();
-    obj.inverse.setMatrix(cmat.inverse());
+    const cmat = this.injected.getScreenCTM();
     obj.injected = this.injected.appendChild(obj.obj);
     obj.injected.classList.add(this._mine("g"));
     obj._initInjected();
     const bb3 = obj.getBoundingBox();
-    const cx = (bb2.x - bb3.x) / 2;
-    const cy = (bb2.y - bb3.y) / 2;
+    const bb3t = this._transformBox(bb3, cmat.inverse());
+    const cx = bb3t.x - bb3.x;
+    const cy = bb3t.y - bb3.y;
     obj.setPos(cx, cy);
     obj.lastPos = [cx, cy];
     obj.cpos = [cx, cy];
+    obj.inverse.setMatrix(cmat.inverse());
     obj._scripts(this.jscode);
   }
 
