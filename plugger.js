@@ -429,18 +429,18 @@ class plugger {
       //obj.reset();
     }
     //obj._shadow();
-    const cmat = this.injected.getScreenCTM();
+    const cmat = this.injected.getCTM();
+    cmat.e = 0;
+    cmat.f = 0;
     obj.injected = this.injected.appendChild(obj.obj);
+    obj.inverse.setMatrix(cmat.inverse());
     obj.injected.classList.add(this._mine("g"));
     obj._initInjected();
-    const bb3 = obj.getBoundingBox();
-    const bb3t = this._transformBox(bb3, cmat.inverse());
-    const cx = bb3t.x - bb3.x;
-    const cy = bb3t.y - bb3.y;
-    obj.setPos(cx, cy);
+    const cx = bb2.x;
+    const cy = bb2.y;
+    obj.setPos(0, 0);
     obj.lastPos = [cx, cy];
     obj.cpos = [cx, cy];
-    obj.inverse.setMatrix(cmat.inverse());
     obj._scripts(this.jscode);
   }
 
