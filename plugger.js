@@ -44,6 +44,14 @@ function _def() {
   return result;
 }
 
+function _ex(o) {
+  let result = true;
+  if (typeof o === "undefined" || o === undefined || o === null) {
+    result = false;
+  }
+  return result;
+}
+
 function toggleClass(obj, classname) {
   if (obj.classList.contains(classname)) {
     obj.classList.remove(classname);
@@ -486,9 +494,11 @@ class plugger {
   _innerjs() {
     let of = /function[\s\n\r]+[^\s\n\r]*[\s\n\r]*\([^\)]*\)[\s\n\r]*\{(.+)\}/ms;
     let oc = of.exec(this.jscode);
-    if (oc.length > 1) {
-      oc.shift();
-      this.jscode = oc[0];
+    if (_ex(oc)) {
+      if (oc.length > 1) {
+        oc.shift();
+        this.jscode = oc[0];
+      }
     }
   }
   _shadow() {
