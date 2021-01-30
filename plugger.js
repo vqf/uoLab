@@ -421,7 +421,6 @@ class plugger {
   link(obj) {
     let uid = obj._uid();
     this.linkedTo[uid] = obj;
-    const bb2 = obj.getBoundingBox();
     if (obj.injected !== null) {
       obj.injected.parentNode.removeChild(obj.injected);
       obj.injected = null;
@@ -434,13 +433,12 @@ class plugger {
     cmat.f = 0;
     obj.injected = this.injected.appendChild(obj.obj);
     obj.inverse.setMatrix(cmat.inverse());
+    //console.log(obj.injected.transform.baseVal.consolidate());
+    console.log(obj.injected.getCTM());
     obj.injected.classList.add(this._mine("g"));
     obj._initInjected();
-    const cx = bb2.x;
-    const cy = bb2.y;
-    obj.setPos(0, 0);
-    obj.lastPos = [cx, cy];
-    obj.cpos = [cx, cy];
+    const bb2 = obj.getBoundingBox();
+    this.scene._showRect(bb2);
     obj._scripts(this.jscode);
   }
 

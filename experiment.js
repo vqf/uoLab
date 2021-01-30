@@ -11,7 +11,7 @@ let tips = [];
 for (let i = 0; i < 1; i++) {
   let newtip = new yellowTip(sc);
   tips.push(newtip);
-  newtip.inject(i * 10, 0);
+  newtip.inject(i * 10 + 200, 100);
 }
 
 let epp = new tube(sc);
