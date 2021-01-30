@@ -21,19 +21,32 @@ document.addEventListener("log", function(e) {
 });
 
 function loadDependencies(scs) {
-  scs.forEach(sc => {
+  let result = null;
+  if (scs.length > 0) {
+    const sc = scs.shift();
     logger.custom = sc;
     document.dispatchEvent(logger);
     let sid = "ld" + sc.replace(/\./g, "_");
     let s = document.getElementById(sid);
     if (s === null) {
-      s = document.createElement("script");
-      s.type = "text/javascript";
-      s.id = sid;
-      s.src = sc;
-      document.head.appendChild(s);
+      result = new Promise(function(resolve, reject) {
+        s = document.createElement("script");
+        s.type = "text/javascript";
+        s.id = sid;
+        s.src = sc;
+        s.addEventListener("load", function() {
+          resolve(s.id);
+        });
+        s.addEventListener("error", function() {
+          reject(s.id);
+        });
+        document.head.appendChild(s);
+      })
+        .then(loadDependencies(scs))
+        .catch("Error");
     }
-  });
+  }
+  return result;
 }
 
 function loadStyles(scs) {
