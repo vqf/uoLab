@@ -1,6 +1,7 @@
 class anim {
   constructor(transf) {
     this.parent = transf;
+    this.uid = _uid();
     this.obj = transf.getInjected();
     let all = this.obj.transform.baseVal;
     this.translate = all.getItem(0);
@@ -8,7 +9,24 @@ class anim {
     this.resize = all.getItem(2);
     this.queue = false;
     this.promises = [];
+    this._initEvents();
     this.loop = new _looper();
+  }
+  _eventName(evName) {
+    return evName + "_" + this.uid;
+  }
+  _registerEvent(eventName, f) {
+    const evName = this._eventName(eventName);
+    const result = new Event(evName);
+    document.addEventListener(evName, function(e) {
+      f(e);
+    });
+  }
+  _initEvents() {
+    this.events = {
+      start: new Event("animStart_" + this.uid),
+      end: new Event("animEnd_" + this.uid)
+    };
   }
   animTranslate(dx, dy, dur) {
     let target = {};
