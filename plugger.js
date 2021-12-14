@@ -1,43 +1,12 @@
-function _uid() {
-  let l = 10;
-  let result = "";
-  let letters = [
-    "a",
-    "b",
-    "c",
-    "d",
-    "e",
-    "f",
-    "g",
-    "h",
-    "i",
-    "j",
-    "k",
-    "l",
-    "m",
-    "n",
-    "o",
-    "p"
-  ];
-  for (let i = 0; i < l; i++) {
-    let tl = 0;
-    for (let j = 0; j < 4; j++) {
-      tl = tl << 1;
-      let r = Math.random();
-      if (r > 0.5) {
-        tl++;
-      }
-    }
-    result += letters[tl];
-  }
-  return result;
-}
+import { scene } from './scene.js';
+import { loadSVGTag, _uid } from './loadTag.js';
+import { anim } from './anim.js';
 
-function _def() {
-  var result = "";
+export function _def() {
+  var result = '';
   for (var i = 0; i < arguments.length; i++) {
     var r = arguments[i];
-    if (typeof r !== "undefined" && r !== "") {
+    if (typeof r !== 'undefined' && r !== '') {
       return r;
     }
   }
@@ -46,7 +15,7 @@ function _def() {
 
 function _ex(o) {
   let result = true;
-  if (typeof o === "undefined" || o === undefined || o === null) {
+  if (typeof o === 'undefined' || o === undefined || o === null) {
     result = false;
   }
   return result;
@@ -60,10 +29,10 @@ function toggleClass(obj, classname) {
   }
 }
 
-class plugger {
+export class plugger {
   constructor(parent, obj, jscode, style) {
     this.parent = parent;
-    this.publicuid = "amnfabenfo";
+    this.publicuid = 'amnfabenfo';
     this.uid = _uid();
     this.scene = null;
     this.scaleCorrection = 1;
@@ -77,7 +46,7 @@ class plugger {
     this.style = _def(style);
     this.backup = {
       jscode: _def(jscode.toString()),
-      style: _def(style)
+      style: _def(style),
     };
     this.pt = this.parent.createSVGPoint();
     //
@@ -106,7 +75,7 @@ class plugger {
   }
 
   reset() {
-    Object.keys(this.backup).forEach(k => {
+    Object.keys(this.backup).forEach((k) => {
       this[k] = this.backup[k];
     });
   }
@@ -114,7 +83,7 @@ class plugger {
   broadcast(msg) {
     let myself = this;
     const objs = Object.keys(this.linkedTo);
-    objs.forEach(k => {
+    objs.forEach((k) => {
       this.linkedTo[k].getMessage(msg, myself);
     });
   }
@@ -141,10 +110,10 @@ class plugger {
   }
 
   _addSVGDef(el) {
-    let d = this.parent.querySelector("defs");
+    let d = this.parent.querySelector('defs');
     if (d === null) {
       let df = {
-        tag: "defs"
+        tag: 'defs',
       };
       d = this.parent.appendChild(loadSVGTag(df));
     }
@@ -156,33 +125,33 @@ class plugger {
   }
 
   highlightOn() {
-    this.injected.classList.add(`${this._mine("high")}`);
+    this.injected.classList.add(`${this._mine('high')}`);
   }
   highlightOff() {
-    this.injected.classList.remove(`${this._mine("high")}`);
+    this.injected.classList.remove(`${this._mine('high')}`);
   }
 
   _hoverfilter() {
     let s = {
-      tag: "style",
-      id: this._mine("st"),
+      tag: 'style',
+      id: this._mine('st'),
       content: `
-        .${this._mine("g")}:hover, .${this._mine("high")}{
-          filter: url("#${this._mine("blur")}")
+        .${this._mine('g')}:hover, .${this._mine('high')}{
+          filter: url("#${this._mine('blur')}")
         }
-      `
+      `,
     };
     let f = {
-      tag: "filter",
-      id: this._mine("blur"),
+      tag: 'filter',
+      id: this._mine('blur'),
       content: [
         {
-          tag: "feDropShadow",
+          tag: 'feDropShadow',
           dx: 0.2,
           dy: 0.2,
-          stdDeviation: 0.5
-        }
-      ]
+          stdDeviation: 0.5,
+        },
+      ],
     };
     let st = loadSVGTag(s);
     this._addSVGDef(st);
@@ -196,7 +165,7 @@ class plugger {
 
   getBoundingBox(lid) {
     let el = this.injected;
-    if (typeof lid !== "undefined") {
+    if (typeof lid !== 'undefined') {
       el = this.getElementByLocalId(lid);
     }
     return el.getBoundingClientRect();
@@ -207,16 +176,16 @@ class plugger {
       isDragging: false,
       from: {
         x: 0,
-        y: 0
+        y: 0,
       },
       time: Date.now(),
-      dt: "0s",
+      dt: '0s',
       dtms: 0,
       dragEvents: {
         mousedown: null,
         mouseup: null,
-        mousemove: null
-      }
+        mousemove: null,
+      },
     };
     return result;
   }
@@ -227,7 +196,7 @@ class plugger {
       el = this.getElementByLocalId(lid);
     }
     let myself = this;
-    let onthefly = function(e) {
+    let onthefly = function (e) {
       f(e, myself);
     };
     el.addEventListener(evt, onthefly);
@@ -244,12 +213,9 @@ class plugger {
     y = _def(y);
     this.pos.setTranslate(x, y);
     this.cpos = [x, y];
-    /*Object.keys(this.linkedTo).forEach(k => {
-      this.linkedTo[k].setPos(x, y);
-    });*/
   }
   setAngle(a, x, y) {
-    if (typeof x === "undefined") {
+    if (typeof x === 'undefined') {
       x = 0;
       y = 0;
     }
@@ -258,11 +224,11 @@ class plugger {
 
   _pointer(x, y) {
     let d = loadSVGTag({
-      tag: "circle",
+      tag: 'circle',
       cx: x,
       cy: y,
       r: 10,
-      class: "pointer"
+      class: 'pointer',
     });
     this.parent.appendChild(d);
   }
@@ -274,14 +240,14 @@ class plugger {
 
   rotate(angle, dur, x, y) {
     let bb = this.getBoundingBox();
-    if (typeof x === "undefined") {
+    if (typeof x === 'undefined') {
       x = bb.width / 2;
       y = bb.height / 2;
       //this._pointer(x, y);
     }
     x += bb.x;
     y += bb.y;
-    if (typeof dur === "undefined" || dur === undefined) {
+    if (typeof dur === 'undefined' || dur === undefined) {
       dur = 1;
     }
 
@@ -314,7 +280,7 @@ class plugger {
   _actOnMouse(evt) {
     var x = 0;
     var y = 0;
-    if (typeof evt.touches !== "undefined" && evt.touches.length > 0) {
+    if (typeof evt.touches !== 'undefined' && evt.touches.length > 0) {
       // Tablet
       x = evt.touches[0].clientX;
       y = evt.touches[0].clientY;
@@ -340,25 +306,26 @@ class plugger {
     const dx = pt[0] - this.drag.from.dx;
     const dy = pt[1] - this.drag.from.dy;
     this.setPos(dx, dy);
-    this.getMessage("hasMoved");
+    this.getMessage('hasMoved');
   }
   _endDrag(e) {
     if (this.drag.isDragging === true) {
       this.drag.isDragging = false;
-      this.getMessage("mouseUp");
+      this.getMessage('mouseUp');
     }
   }
 
   makeDraggable(obj) {
     let myself = this;
-    this.drag.dragEvents.mousedown = obj.addEventListener("mousedown", function(
-      e
-    ) {
-      myself._startDrag(e);
-    });
+    this.drag.dragEvents.mousedown = obj.addEventListener(
+      'mousedown',
+      function (e) {
+        myself._startDrag(e);
+      }
+    );
     this.drag.dragEvents.mousemove = document.addEventListener(
-      "mousemove",
-      function(e) {
+      'mousemove',
+      function (e) {
         let ct = Date.now();
         let dt = ct - myself.drag.time;
         if (myself.drag.isDragging === true && dt >= myself.drag.dtms) {
@@ -368,8 +335,8 @@ class plugger {
       }
     );
     this.drag.dragEvents.mouseup = document.addEventListener(
-      "mouseup",
-      function(e) {
+      'mouseup',
+      function (e) {
         myself._endDrag(e);
       }
     );
@@ -393,17 +360,17 @@ class plugger {
   getMessage(msg, sender) {
     let from = _def(sender, null);
     if (this.scene instanceof scene) {
-      if (msg === "hasMoved") {
+      if (msg === 'hasMoved') {
         let myself = this;
         this.scene._clearObjectGrid(myself);
         this.scene._calcSpace(myself);
         this.closest = this.scene.closest(myself, 2);
       }
-      if (msg === "clash") {
+      if (msg === 'clash') {
         this.setPos(this.lastPos[0], this.lastPos[1]);
         this._endDrag();
       }
-      if (msg === "safePos") {
+      if (msg === 'safePos') {
         if (this.cpos !== null) {
           this.lastPos = [this.cpos[0], this.cpos[1]];
         }
@@ -443,7 +410,7 @@ class plugger {
     obj.inverse.setMatrix(cmat.inverse());
     //console.log(obj.injected.transform.baseVal.consolidate());
     console.log(obj.injected.getCTM());
-    obj.injected.classList.add(this._mine("g"));
+    obj.injected.classList.add(this._mine('g'));
     obj._initInjected();
     const bb2 = obj.getBoundingBox();
     this.scene._showRect(bb2);
@@ -456,7 +423,7 @@ class plugger {
     if (this.injected === null) {
       this._shadow();
       this.injected = this.parent.appendChild(this.obj);
-      this.injected.classList.add(this._mine("g"));
+      this.injected.classList.add(this._mine('g'));
       this._initInjected();
     }
     this.setPos(x, y);
@@ -468,11 +435,11 @@ class plugger {
     }
   }
   _scripts(sc) {
-    let sid = "script" + this.uid;
+    let sid = 'script' + this.uid;
     let s = document.getElementById(sid);
     if (s === null) {
-      s = document.createElement("script");
-      s.type = "text/javascript";
+      s = document.createElement('script');
+      s.type = 'text/javascript';
       s.id = sid;
       s.innerHTML = sc;
       document.body.appendChild(s);
@@ -480,11 +447,11 @@ class plugger {
   }
   _styles(sc) {
     if (sc === null) return;
-    let sid = "style" + sc.replace(/\./g, "_");
+    let sid = 'style' + sc.replace(/\./g, '_');
     let s = document.getElementById(sid);
     if (s === null) {
-      s = document.createElement("link");
-      (s.rel = "stylesheet"), (s.type = "text/css");
+      s = document.createElement('link');
+      (s.rel = 'stylesheet'), (s.type = 'text/css');
       s.id = sid;
       s.innerHTML = sc;
       document.head.appendChild(s);
@@ -492,7 +459,8 @@ class plugger {
   }
 
   _innerjs() {
-    let of = /function[\s\n\r]+[^\s\n\r]*[\s\n\r]*\([^\)]*\)[\s\n\r]*\{(.+)\}/ms;
+    let of =
+      /function[\s\n\r]+[^\s\n\r]*[\s\n\r]*\([^\)]*\)[\s\n\r]*\{(.+)\}/ms;
     let oc = of.exec(this.jscode);
     if (_ex(oc)) {
       if (oc.length > 1) {
@@ -505,12 +473,12 @@ class plugger {
     this.obj.innerHTML = this.obj.innerHTML
       .replace(
         /(id\s*=\s*[\"\'])([^\"\']+)([\"\'])/g,
-        "$1" + "$2" + this.uid + "$3"
+        '$1' + '$2' + this.uid + '$3'
       )
-      .replace(/local\(([^\)]+)\)/g, "$1" + this.uid);
+      .replace(/local\(([^\)]+)\)/g, '$1' + this.uid);
     this.style = this.style.replace(
       /(#)([^\{]+)\s*(\{)/g,
-      "$1" + "$2" + this.uid + "$3"
+      '$1' + '$2' + this.uid + '$3'
     );
     this._innerjs();
     this._convertVars();
@@ -519,20 +487,20 @@ class plugger {
   }
 
   _convertLocals() {
-    this.jscode = this.jscode.replace(/local\(([^\)]+)\)/g, "$1" + this.uid);
+    this.jscode = this.jscode.replace(/local\(([^\)]+)\)/g, '$1' + this.uid);
   }
 
   _convertVars() {
     const re1 = /(?:let|var|const)\s+([^\s]+)\s*[=;$]/gi;
-    const bef = "([^\\w\\d\\_])(";
-    const aft = ")([^\\w\\_\\d])";
+    const bef = '([^\\w\\d\\_])(';
+    const aft = ')([^\\w\\_\\d])';
     this._convert(re1, bef, aft);
   }
 
   _convertFuncts() {
     const re1 = /function\s+([^\s]+)\s*\(/gi;
-    const bef = "([^\\w\\d\\_])(";
-    const aft = ")(\\s*\\()";
+    const bef = '([^\\w\\d\\_])(';
+    const aft = ')(\\s*\\()';
     this._convert(re1, bef, aft);
   }
 
@@ -549,10 +517,8 @@ class plugger {
     } while (m);
     for (let i in jsvars) {
       let v = jsvars[i];
-      const repl = new RegExp(bef + v + aft, "g");
-      this.jscode = this.jscode.replace(repl, "$1$2" + this.uid + "$3");
+      const repl = new RegExp(bef + v + aft, 'g');
+      this.jscode = this.jscode.replace(repl, '$1$2' + this.uid + '$3');
     }
   }
 }
-
-if (DEBUG > 0) console.log("Plugger loaded");

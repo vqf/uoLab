@@ -1,4 +1,5 @@
-class anim {
+import { _uid } from './loadTag.js';
+export class anim {
   constructor(transf) {
     this.parent = transf;
     this.uid = _uid();
@@ -13,19 +14,19 @@ class anim {
     this.loop = new _looper();
   }
   _eventName(evName) {
-    return evName + "_" + this.uid;
+    return evName + '_' + this.uid;
   }
   _registerEvent(eventName, f) {
     const evName = this._eventName(eventName);
     const result = new Event(evName);
-    document.addEventListener(evName, function(e) {
+    document.addEventListener(evName, function (e) {
       f(e);
     });
   }
   _initEvents() {
     this.events = {
-      start: new Event("animStart_" + this.uid),
-      end: new Event("animEnd_" + this.uid)
+      start: new Event('animStart_' + this.uid),
+      end: new Event('animEnd_' + this.uid),
     };
   }
   animTranslate(dx, dy, dur) {
@@ -37,7 +38,7 @@ class anim {
     } else {
       this.loop = new _looper();
     }
-    this.loop.loop("t", this, dur, target);
+    this.loop.loop('t', this, dur, target);
     return this.loop;
   }
   then(f) {
@@ -58,11 +59,11 @@ class anim {
     } else {
       this.loop = new _looper();
     }
-    this.loop.loop("r", this, dur, target);
+    this.loop.loop('r', this, dur, target);
     return this.loop;
   }
   cleanPromises() {
-    this.promises.forEach(p => {
+    this.promises.forEach((p) => {
       p();
     });
     this.promises = [];
@@ -90,7 +91,7 @@ class _looper {
     if (this.busy === true) {
       this.queue.push([type, info, dur, target]);
       if (this.info.promises.length > 0) {
-        this.info.promises.forEach(p => {
+        this.info.promises.forEach((p) => {
           this.queue.push(p);
         });
         this.info.promises = [];
@@ -103,11 +104,11 @@ class _looper {
       this.target = target;
       this.ct = 0;
       this.callback = null;
-      if (type === "t") {
+      if (type === 't') {
         this.current.x = this.info.translate.matrix.e;
         this.current.y = this.info.translate.matrix.f;
         this.callback = this._Trefresh;
-      } else if (type === "r") {
+      } else if (type === 'r') {
         this.current.angle = this.info.rotate.angle;
         this.callback = this._Rrefresh;
       }
@@ -129,7 +130,7 @@ class _looper {
       this.busy = false;
       if (this.queue.length > 0) {
         let opts = this.queue.shift();
-        if (typeof opts === "function") {
+        if (typeof opts === 'function') {
           opts();
         } else {
           this.loop(opts[0], opts[1], opts[2], opts[3]);
@@ -137,7 +138,7 @@ class _looper {
       } else {
         this.info.cleanPromises();
       }
-      this.info.parent.getMessage("hasMoved");
+      this.info.parent.getMessage('hasMoved');
     }
   }
 }

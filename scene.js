@@ -1,6 +1,9 @@
 let DEBUG_GRID = false;
 let DEBUG_PROXIMITY = false;
 
+import { _def } from './plugger.js';
+export * from './objects.js';
+
 function inRange(v, min, max) {
   let result = v;
   if (v < min) {
@@ -12,7 +15,7 @@ function inRange(v, min, max) {
   return result;
 }
 
-class scene {
+export class scene {
   constructor(svg) {
     this.svg = svg;
     this.lognBoxes = 6; // 64 boxes
@@ -25,10 +28,10 @@ class scene {
     this._initBoxes();
     this._initTranslator();
     let f = this._initBoxes;
-    let onthefly = function(evt) {
+    let onthefly = function (evt) {
       f(myself);
     };
-    window.addEventListener("resize", onthefly);
+    window.addEventListener('resize', onthefly);
   }
 
   _startGrid() {
@@ -52,7 +55,7 @@ class scene {
 
   _clearObjectGrid(obj) {
     let uid = obj._uid();
-    this.squares[uid].forEach(p => {
+    this.squares[uid].forEach((p) => {
       if (typeof this.grid[p[0]][p[1]][uid] !== undefined) {
         delete this.grid[p[0]][p[1]][uid];
       }
@@ -102,6 +105,8 @@ class scene {
     return obj;
   }
 
+  remove() {}
+
   _getFromGrid(b, puid) {
     let o = [];
     let stx = inRange(b.nstx, 0, this.nboxes);
@@ -112,7 +117,7 @@ class scene {
       for (let j = sty; j <= ndy; j++) {
         let k = Object.keys(this.grid[i][j]);
         if (k.length > 0) {
-          k.forEach(x => {
+          k.forEach((x) => {
             if (x !== puid) {
               o[x] = true;
             }
@@ -141,7 +146,7 @@ class scene {
     let bbox = obj.getBoundingBox();
     let bbbox = bbox;
     let inner = false;
-    if (typeof partid !== "undefined") {
+    if (typeof partid !== 'undefined') {
       let uid = document.getElementById(partid + obj._uid());
       if (uid !== null) {
         bbox = uid.getBoundingClientRect();
@@ -156,7 +161,7 @@ class scene {
       let cy = bbox.y + bbox.height / 2;
       let d = -1;
       let hasClashes = false;
-      uids.forEach(u => {
+      uids.forEach((u) => {
         if (hasClashes === false) {
           let j = this.localizers[u];
           if (obj.clashesWith(j)) {
@@ -164,7 +169,7 @@ class scene {
             //Check clash
             let isClashing = this._clash(cbox, bbbox);
             if (isClashing === true) {
-              obj.getMessage("clash");
+              obj.getMessage('clash');
               hasClashes = true;
             }
           }
@@ -176,7 +181,7 @@ class scene {
         o = this._getFromGrid(b, puid);
         uids = Object.keys(o);
       }
-      uids.forEach(u => {
+      uids.forEach((u) => {
         let j = this.localizers[u];
         let cbox = j.getBoundingBox();
         let icx = cbox.x + cbox.width / 2;
@@ -190,17 +195,17 @@ class scene {
         }
       });
       if (hasClashes === false) {
-        obj.getMessage("safePos");
+        obj.getMessage('safePos');
       }
       if (DEBUG_PROXIMITY === true) {
-        this._showPoint(cx, cy, "obj1");
+        this._showPoint(cx, cy, 'obj1');
         let cbox = result.getBoundingBox();
         let icx = cbox.x + cbox.width / 2;
         let icy = cbox.y + cbox.height / 2;
-        this._showPoint(icx, icy, "obj2");
+        this._showPoint(icx, icy, 'obj2');
       }
     } else {
-      obj.getMessage("safePos");
+      obj.getMessage('safePos');
     }
     return result;
   }
@@ -208,15 +213,15 @@ class scene {
   _initTranslator() {
     let myself = this;
     this.sceneObjects = {
-      pipette: function(x, y) {
+      pipette: function (x, y) {
         return new pipette(myself, x, y);
       },
-      tip: function(x, y) {
+      tip: function (x, y) {
         return new tip(myself, x, y);
       },
-      tube: function(x, y) {
+      tube: function (x, y) {
         return new tube(myself, x, y);
-      }
+      },
     };
   }
 
@@ -227,7 +232,7 @@ class scene {
     let nboxes = myself.nboxes;
     myself.box = {
       x: myself.w / nboxes,
-      y: myself.h / nboxes
+      y: myself.h / nboxes,
     };
     if (DEBUG_GRID === true) {
       myself._hideGrid();
@@ -242,21 +247,21 @@ class scene {
   _showBox(nx, ny) {
     let x0 = nx * this.box.x;
     let y0 = ny * this.box.y;
-    let uid = "r_" + nx + "_" + ny;
+    let uid = 'r_' + nx + '_' + ny;
     let r = loadSVGTag({
       id: uid,
-      tag: "rect",
-      class: "debugBox",
+      tag: 'rect',
+      class: 'debugBox',
       x: x0,
       y: y0,
       width: this.box.x,
-      height: this.box.y
+      height: this.box.y,
     });
     this.svg.insertBefore(r, this.svg.firstChild);
   }
 
   _hideBox(nx, ny) {
-    let uid = "r_" + nx + "_" + ny;
+    let uid = 'r_' + nx + '_' + ny;
     let g = document.getElementById(uid);
     if (g !== null) {
       g.parentElement.removeChild(g);
@@ -264,36 +269,36 @@ class scene {
   }
 
   _hideGrid() {
-    let g = document.getElementById("grid");
+    let g = document.getElementById('grid');
     if (g !== null) {
       g.parentElement.removeChild(g);
     }
   }
   _showGrid() {
     let grd = {
-      tag: "g",
-      id: "grid",
-      content: []
+      tag: 'g',
+      id: 'grid',
+      content: [],
     };
     for (let i = 0; i < this.w; i += this.box.x) {
       let l = {
-        tag: "line",
-        class: "grid",
+        tag: 'line',
+        class: 'grid',
         x1: i,
         y1: 0,
         x2: i,
-        y2: this.h
+        y2: this.h,
       };
       grd.content.push(l);
     }
     for (let i = 0; i < this.h; i += this.box.y) {
       let l = {
-        tag: "line",
-        class: "grid",
+        tag: 'line',
+        class: 'grid',
         x1: 0,
         y1: i,
         x2: this.w,
-        y2: i
+        y2: i,
       };
       grd.content.push(l);
     }
@@ -303,37 +308,37 @@ class scene {
     let c = document.getElementById(id);
     if (c === null) {
       let p = {
-        tag: "circle",
-        class: "debugCircle",
+        tag: 'circle',
+        class: 'debugCircle',
         id: id,
         cx: x,
         cy: y,
-        r: 5
+        r: 5,
       };
       this.svg.appendChild(loadSVGTag(p));
     } else {
-      c.setAttribute("cx", x);
-      c.setAttribute("cy", y);
+      c.setAttribute('cx', x);
+      c.setAttribute('cy', y);
     }
   }
   _showRect(box, id) {
     let c = document.getElementById(id);
     if (c === null) {
       let p = {
-        tag: "rect",
-        class: "debugCircle",
+        tag: 'rect',
+        class: 'debugCircle',
         id: id,
         x: box.x,
         y: box.y,
         width: box.width,
-        height: box.height
+        height: box.height,
       };
       this.svg.appendChild(loadSVGTag(p));
     } else {
-      c.setAttribute("x", box.x);
-      c.setAttribute("y", box.y);
-      c.setAttribute("width", box.width);
-      c.setAttribute("height", box.height);
+      c.setAttribute('x', box.x);
+      c.setAttribute('y', box.y);
+      c.setAttribute('width', box.width);
+      c.setAttribute('height', box.height);
     }
   }
 }
